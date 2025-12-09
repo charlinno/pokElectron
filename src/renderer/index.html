@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pokédex Electron</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Barre de titre personnalisée -->
+  <div id="title-bar" class="title-bar">
+    <div class="title-bar-content">
+      <span class="title-bar-title">Pokédex</span>
+    </div>
+    <div class="title-bar-controls">
+      <button id="btn-minimize" class="title-bar-btn minimize-btn" title="Reduire">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+      </button>
+      <button id="btn-maximize" class="title-bar-btn maximize-btn" title="Agrandir">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+        </svg>
+      </button>
+      <button id="btn-close" class="title-bar-btn close-btn" title="Fermer">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div id="app">
+    <!-- Page d'accueil -->
+    <div id="home-page" class="page active">
+      <div class="container home-container">
+        <div class="logo-section">
+          <h1>Pokédex</h1>
+          <p class="subtitle">Capture et gère tes Pokémons préférés</p>
+        </div>
+
+        <div class="stats-section">
+          <div class="stat-card">
+            <div class="stat-number" id="captured-count">0</div>
+            <div class="stat-label">Pokémons capturés</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="total-count">0</div>
+            <div class="stat-label">Total disponibles</div>
+          </div>
+        </div>
+
+        <div class="buttons-section">
+          <button class="btn btn-primary" onclick="showPage('pokedex-page')">
+            Consulter le Pokédex
+          </button>
+          <button class="btn btn-secondary" onclick="showPage('team-page')">
+            Gérer mon Équipe
+          </button>
+          <button class="btn btn-tertiary" onclick="showPage('capture-page')">
+            Attraper des Pokémons
+          </button>
+        </div>
+
+        <div class="team-preview" id="team-preview" style="display: none;">
+          <h3>Mon Équipe Actuelle</h3>
+          <div id="team-preview-list" class="team-preview-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Page Pokédex -->
+    <div id="pokedex-page" class="page">
+      <div class="container">
+        <div class="page-header">
+          <button class="btn btn-back" onclick="showPage('home-page')">← Retour</button>
+          <h2>Pokédex</h2>
+          <div style="width: 100px;"></div>
+        </div>
+
+        <div class="pokemon-list-container">
+          <div id="pokemon-list" class="pokemon-grid">
+            <!-- Les Pokémons seront générés ici -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Page Équipe -->
+    <div id="team-page" class="page">
+      <div class="container">
+        <div class="page-header">
+          <button class="btn btn-back" onclick="showPage('home-page')">← Retour</button>
+          <h2>Mon Équipe</h2>
+          <button class="btn btn-small" onclick="saveTeam()">Sauvegarder</button>
+        </div>
+
+        <div class="team-builder">
+          <div class="team-slots">
+            <h3>Slots de l'équipe</h3>
+            <div id="team-slots" class="slots-grid">
+              <!-- 6 slots pour l'équipe -->
+            </div>
+          </div>
+
+          <div class="pokemon-selector">
+            <h3>Pokémons capturés</h3>
+            <div id="captured-selector" class="pokemon-selector-list">
+              <!-- Pokémons capturés -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Page Capture -->
+    <div id="capture-page" class="page">
+      <div class="container">
+        <div class="page-header">
+          <button class="btn btn-back" onclick="showPage('home-page')">← Retour</button>
+          <h2>Attraper des Pokémons</h2>
+        </div>
+
+        <div class="capture-container">
+          <div class="capture-area" id="capture-area">
+            <!-- Les Pokémons apparaîtront ici -->
+            <p class="instruction">Attends qu'un Pokémon apparaisse et clique dessus!</p>
+          </div>
+
+          <div class="capture-stats">
+            <div id="pokemon-to-catch" class="pokemon-info" style="display: none;">
+              <img id="capture-pokemon-img" src="" alt="Pokemon">
+              <p id="capture-pokemon-name"></p>
+              <div class="timer" id="capture-timer"></div>
+            </div>
+          </div>
+
+          <button class="btn btn-primary" onclick="startRandomCaptures()">
+            Démarrer les captures
+          </button>
+          <button class="btn btn-secondary" onclick="stopRandomCaptures()">
+            Arrêter les captures
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de chargement -->
+    <div id="loading-modal" class="modal" style="display: none;">
+      <div class="modal-content">
+        <div class="spinner"></div>
+        <p id="loading-message">Chargement...</p>
+      </div>
+    </div>
+
+    <!-- Modal de notification -->
+    <div id="notification-modal" class="modal" style="display: none;">
+      <div class="modal-content notification">
+        <h3 id="notification-title">Notification</h3>
+        <p id="notification-message"></p>
+        <button class="btn btn-primary" onclick="closeNotification()">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/renderer.js"></script>
+  <script src="js/home.js"></script>
+  <script src="js/pokedex.js"></script>
+  <script src="js/team.js"></script>
+  <script src="js/capture.js"></script>
+</body>
+</html>
+
