@@ -132,6 +132,47 @@ class APIService {
   }
 
   /**
+   * Récupérer tous les Pokémons disponibles
+   * @returns {Promise<Array>} Liste de tous les Pokémons
+   */
+  async getAllPokemon() {
+    try {
+      const cacheKey = 'pokemon_list_all';
+      if (this.isCached(cacheKey)) {
+        console.log(`Cache hit: pokemon_list_all`);
+        return this.cache.get(cacheKey).data;
+      }
+
+      const allPokemons = [];
+      const limit = 100;
+      let offset = 0;
+      let hasMore = true;
+
+      while (hasMore) {
+        const pokemons = await this.getPokemonList(offset, limit);
+        if (pokemons.length === 0) {
+          hasMore = false;
+        } else {
+          allPokemons.push(...pokemons);
+          offset += limit;
+        }
+      }
+
+      // Mettre en cache
+      this.cache.set(cacheKey, {
+        data: allPokemons,
+        timestamp: Date.now()
+      });
+
+      console.log(`Total Pokemons charges: ${allPokemons.length}`);
+      return allPokemons;
+    } catch (error) {
+      console.error('Erreur getAllPokemon:', error.message);
+      throw error;
+    }
+  }
+
+  /**
    * Transformer les données de l'API au format de la base de données
    * @param {Object} apiPokemon - Données brutes de l'API
    * @returns {Object} Données transformées
@@ -149,6 +190,15 @@ class APIService {
         apiPokemon.sprites?.front_default ||
         '';
 
+      // Récupérer les PV (HP) depuis les stats
+      let hp = 20; // Valeur par défaut
+      if (apiPokemon.stats && Array.isArray(apiPokemon.stats)) {
+        const hpStat = apiPokemon.stats.find(stat => stat.stat.name === 'hp');
+        if (hpStat) {
+          hp = Math.ceil(hpStat.base_stat / 5); // Diviser par 5 pour avoir des valeurs raisonnables
+        }
+      }
+
       return {
         pokedex_id: apiPokemon.id,
         name: apiPokemon.name,
@@ -157,6 +207,7 @@ class APIService {
         type_secondary: typeSecondary,
         height: apiPokemon.height / 10, // Convertir en mètres
         weight: apiPokemon.weight / 10, // Convertir en kg
+        hp: hp,
         is_captured: 0,
         created_at: new Date().toISOString()
       };
@@ -198,23 +249,23 @@ class APIService {
   /**
    * Remplir la base de données avec les Pokémons depuis l'API
    * @param {Database} database - Instance de la base de données
-   * @param {number} limit - Nombre de Pokémons à télécharger
+   * @param {number} limit - Nombre de Pokémons à télécharger (0 = tous)
    * @returns {Promise<Object>} Résultats de la synchronisation
    */
-  async seedDatabase(database, limit = 151) {
+  async seedDatabase(database, limit = 0) {
     try {
-      console.log(`Synchronisation de ${limit} Pokemons en cours...`);
+      console.log(`Synchronisation de ${limit === 0 ? 'TOUS les' : limit} Pokemons en cours...`);
 
       // Vérifier si la DB est déjà remplie
       const existingCount = database.countAllPokemon();
-      if (existingCount >= limit) {
+      if (existingCount > 0 && limit === 0) {
         console.log(`Base de donnees deja remplie (${existingCount} Pokemons)`);
-        return { status: 'already_filled', count: existingCount };
+        return { status: 'already_filled', successCount: existingCount };
       }
 
       // Récupérer la liste des Pokémons
-      const pokemonList = await this.getAllFirstGenPokemon();
-      const pokemonsToFetch = pokemonList.slice(0, limit);
+      const pokemonList = await this.getAllPokemon();
+      const pokemonsToFetch = limit === 0 ? pokemonList : pokemonList.slice(0, limit);
 
       let successCount = 0;
       let errorCount = 0;

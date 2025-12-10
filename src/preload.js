@@ -88,6 +88,12 @@ contextBridge.exposeInMainWorld('pokemonAPI', {
   syncPokemonDatabase: (limit) =>
     ipcRenderer.invoke('sync-pokemon-database', limit),
 
+  /**
+   * Réinitialiser la base de données (vider et resynchroniser)
+   */
+  resetPokemonDatabase: () =>
+    ipcRenderer.invoke('reset-pokemon-database'),
+
   // ========================================
   // Window Control Operations
   // ========================================

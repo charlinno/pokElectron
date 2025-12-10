@@ -62,6 +62,9 @@
           <button class="btn btn-tertiary" onclick="showPage('capture-page')">
             Attraper des Pokémons
           </button>
+          <button class="btn btn-secondary" onclick="forceSyncPokemonDatabase()" style="margin-top: 10px;">
+            Charger TOUS les Pokemons
+          </button>
         </div>
 
         <div class="team-preview" id="team-preview" style="display: none;">
@@ -83,6 +86,55 @@
         <div class="pokemon-list-container">
           <div id="pokemon-list" class="pokemon-grid">
             <!-- Les Pokémons seront générés ici -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Page Détails Pokémon -->
+    <div id="pokemon-details-page" class="page">
+      <div class="container">
+        <div class="page-header">
+          <button class="btn btn-back" onclick="showPage('pokedex-page')">← Retour</button>
+          <h2 id="details-title">Détails Pokémon</h2>
+          <div style="width: 100px;"></div>
+        </div>
+
+        <div class="pokemon-details-container">
+          <div class="details-image">
+            <img id="details-image" src="" alt="Pokemon" class="pokemon-image-large">
+          </div>
+
+          <div class="details-info">
+            <h3 id="details-name"></h3>
+            <p id="details-id" class="details-id"></p>
+
+            <div class="details-types">
+              <h4>Types</h4>
+              <div id="details-types-list"></div>
+            </div>
+
+            <div class="details-stats">
+              <h4>Stats</h4>
+              <div class="stats-list">
+                <div class="stat-row">
+                  <span class="stat-name">Hauteur:</span>
+                  <span id="details-height" class="stat-value"></span>
+                </div>
+                <div class="stat-row">
+                  <span class="stat-name">Poids:</span>
+                  <span id="details-weight" class="stat-value"></span>
+                </div>
+                <div class="stat-row">
+                  <span class="stat-name">PV:</span>
+                  <span id="details-hp" class="stat-value"></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="details-capture-status">
+              <p id="details-capture-status"></p>
+            </div>
           </div>
         </div>
       </div>
@@ -126,23 +178,22 @@
         <div class="capture-container">
           <div class="capture-area" id="capture-area">
             <!-- Les Pokémons apparaîtront ici -->
-            <p class="instruction">Attends qu'un Pokémon apparaisse et clique dessus!</p>
+            <p class="instruction">Clique sur les Pokemons pour les affaiblir et les capturer!</p>
           </div>
 
           <div class="capture-stats">
             <div id="pokemon-to-catch" class="pokemon-info" style="display: none;">
-              <img id="capture-pokemon-img" src="" alt="Pokemon">
+              <img id="capture-pokemon-img" src="" alt="Pokemon" class="pokemon-img-large" onclick="attackPokemon()">
               <p id="capture-pokemon-name"></p>
-              <div class="timer" id="capture-timer"></div>
+              <div class="hp-container">
+                <div class="hp-bar">
+                  <div id="pokemon-hp-bar" class="hp-fill"></div>
+                </div>
+                <p id="pokemon-hp-text" class="hp-text"></p>
+              </div>
+              <p id="capture-hint" class="capture-hint">Clique pour attaquer!</p>
             </div>
           </div>
-
-          <button class="btn btn-primary" onclick="startRandomCaptures()">
-            Démarrer les captures
-          </button>
-          <button class="btn btn-secondary" onclick="stopRandomCaptures()">
-            Arrêter les captures
-          </button>
         </div>
       </div>
     </div>

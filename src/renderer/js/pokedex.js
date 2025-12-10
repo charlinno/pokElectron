@@ -11,8 +11,8 @@ async function loadPokédexPage() {
       pokemonList.innerHTML = `
         <div class="empty-state">
           <p>Aucun Pokemon disponible</p>
-          <button class="btn btn-primary" onclick="syncPokemonDatabase()">
-            Synchroniser depuis l'API
+          <button class="btn btn-primary" onclick="forceSyncPokemonDatabase()">
+            Charger TOUS les Pokemons
           </button>
         </div>
       `;
@@ -37,6 +37,7 @@ async function loadPokédexPage() {
 function createPokemonCard(pokemon) {
   const card = document.createElement('div');
   card.className = `pokemon-card ${pokemon.is_captured ? 'captured' : 'uncaptured'}`;
+  card.style.cursor = 'pointer';
 
   const image = document.createElement('img');
   image.src = pokemon.image_url || 'https://via.placeholder.com/150';
@@ -79,6 +80,52 @@ function createPokemonCard(pokemon) {
     card.appendChild(badge);
   }
 
+  // Ajouter l'événement de clic pour afficher les détails
+  card.addEventListener('click', () => {
+    showPokemonDetails(pokemon);
+  });
+
   return card;
+}
+
+/**
+ * Afficher les détails d'un Pokémon
+ */
+function showPokemonDetails(pokemon) {
+  // Mettre à jour le contenu de la page de détails
+  document.getElementById('details-title').textContent = pokemon.name;
+  document.getElementById('details-image').src = pokemon.image_url || 'https://via.placeholder.com/200';
+  document.getElementById('details-name').textContent = pokemon.name;
+  document.getElementById('details-id').textContent = `#${pokemon.pokedex_id}`;
+  document.getElementById('details-height').textContent = pokemon.height ? `${pokemon.height} m` : 'N/A';
+  document.getElementById('details-weight').textContent = pokemon.weight ? `${pokemon.weight} kg` : 'N/A';
+  document.getElementById('details-hp').textContent = pokemon.hp || 'N/A';
+
+  // Afficher les types
+  const typesList = document.getElementById('details-types-list');
+  typesList.innerHTML = '';
+  if (pokemon.type_primary) {
+    const badge = document.createElement('span');
+    badge.className = `type-badge type-${pokemon.type_primary.toLowerCase()}`;
+    badge.textContent = pokemon.type_primary;
+    typesList.appendChild(badge);
+  }
+  if (pokemon.type_secondary) {
+    const badge = document.createElement('span');
+    badge.className = `type-badge type-${pokemon.type_secondary.toLowerCase()}`;
+    badge.textContent = pokemon.type_secondary;
+    typesList.appendChild(badge);
+  }
+
+  // Afficher le statut de capture
+  const statusElement = document.getElementById('details-capture-status');
+  if (pokemon.is_captured) {
+    statusElement.innerHTML = '<span class="captured-status">Ce Pokemon a ete capture!</span>';
+  } else {
+    statusElement.innerHTML = '<span class="uncaptured-status">Ce Pokemon n\'a pas encore ete capture</span>';
+  }
+
+  // Afficher la page de détails
+  showPage('pokemon-details-page');
 }
 

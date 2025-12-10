@@ -111,9 +111,9 @@ async function loadAllPokemon() {
  */
 async function syncPokemonDatabase() {
   try {
-    showLoading('Synchronisation avec PokéAPI (151 Pokémons)...');
+    showLoading('Synchronisation avec PokéAPI (tous les Pokemons)...');
 
-    const result = await window.pokemonAPI.syncPokemonDatabase(151);
+    const result = await window.pokemonAPI.syncPokemonDatabase(0);
 
     if (result.success) {
       console.log(`Sync terminee: ${result.data.successCount} Pokemons`);
@@ -131,6 +131,46 @@ async function syncPokemonDatabase() {
     }
   } catch (error) {
     console.error('Erreur syncPokemonDatabase:', error);
+    hideLoading();
+    showNotification('ERREUR', 'Impossible de synchroniser les Pokemons');
+  }
+}
+
+/**
+ * Forcer la resynchronisation complète (vider et recharger)
+ */
+async function forceSyncPokemonDatabase() {
+  try {
+    showLoading('Reinitialisation de la base de donnees...');
+
+    // Vider la BD
+    const resetResult = await window.pokemonAPI.resetPokemonDatabase();
+    if (!resetResult.success) {
+      showNotification('ERREUR', `Erreur: ${resetResult.error}`);
+      hideLoading();
+      return;
+    }
+
+    // Recharger tous les Pokémon
+    showLoading('Chargement de TOUS les Pokemons depuis l\'API (cela peut prendre du temps)...');
+    const syncResult = await window.pokemonAPI.syncPokemonDatabase(0);
+
+    if (syncResult.success) {
+      console.log(`Synchronisation complete: ${syncResult.data.successCount} Pokemons`);
+
+      // Recharger les données
+      await loadAllPokemon();
+
+      showNotification(
+        'SYNCHRONISATION COMPLETE',
+        `${syncResult.data.successCount} Pokemons charges dans la base de donnees!`
+      );
+    } else {
+      console.error('Erreur sync:', syncResult.error);
+      showNotification('ERREUR', `Erreur de synchronisation: ${syncResult.error}`);
+    }
+  } catch (error) {
+    console.error('Erreur forceSyncPokemonDatabase:', error);
     hideLoading();
     showNotification('ERREUR', 'Impossible de synchroniser les Pokemons');
   }

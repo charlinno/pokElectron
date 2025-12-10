@@ -8,23 +8,47 @@
     "start": "electron .",
     "dev": "concurrently \"npm run watch\" \"wait-on http://localhost:3000 && electron .\"",
     "build": "electron-builder",
+    "build:win": "electron-builder --win",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage"
   },
-  "keywords": ["electron", "pokedex", "pokemon"],
+  "keywords": [
+    "electron",
+    "pokedex",
+    "pokemon"
+  ],
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^39.2.6",
-    "electron-builder": "^24.6.4",
-    "jest": "^29.7.0",
     "concurrently": "^8.2.2",
+    "electron": "^39.2.6",
+    "electron-builder": "^24.13.3",
+    "jest": "^29.7.0",
     "wait-on": "^7.0.1"
   },
   "dependencies": {
+    "node-fetch": "^2.7.0",
     "pokenode-ts": "^1.20.0",
-    "sqlite3": "^5.1.7",
-    "node-fetch": "^2.7.0"
-  }
+    "sqlite3": "^5.1.7"
+  },
+    "build": {
+        "appId": "com.sdv.pokedex",
+        "productName": "Pokedex",
+        "files": [
+        "src/**/*",
+        "node_modules/**/*",
+        "package.json"
+        ],
+        "directories": {
+        "output": "dist"
+        },
+        "asar": "true",
+        "win": {
+          "target": "nsis",
+          "signAndEditExecutable": false,
+          "verifyUpdateCodeSignature": false,
+          "forceCodeSigning": false
+        }
+    }
 }

@@ -53,6 +53,7 @@ class Database {
         type_secondary VARCHAR(50),
         height FLOAT,
         weight FLOAT,
+        hp INTEGER DEFAULT 20,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
 
@@ -308,6 +309,26 @@ class Database {
     });
   }
 
+  /**
+   * Vider la table des Pokémons
+   * @returns {Promise<void>}
+   */
+  clearAllPokemon() {
+    return new Promise((resolve, reject) => {
+      const sql = 'DELETE FROM pokemon';
+
+      this.db.run(sql, function(err) {
+        if (err) {
+          console.error('❌ Erreur clearAllPokemon:', err);
+          reject(err);
+        } else {
+          console.log('✅ Tous les Pokemons ont ete supprimes de la base de donnees');
+          resolve();
+        }
+      });
+    });
+  }
+
   // ========================================
   // TEAM OPERATIONS
   // ========================================
@@ -479,4 +500,3 @@ class Database {
 }
 
 module.exports = Database;
-

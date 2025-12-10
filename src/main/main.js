@@ -218,6 +218,19 @@ ipcMain.handle('sync-pokemon-database', async (event, limit = 151) => {
   }
 });
 
+// Vider la base de données et forcer la resynchronisation
+ipcMain.handle('reset-pokemon-database', async (event) => {
+  try {
+    await database.clearAllPokemon();
+    // Vider aussi le cache du service API
+    apiService.clearCache();
+    return { success: true, message: 'Base de donnees videe' };
+  } catch (error) {
+    console.error('Erreur reset-pokemon-database:', error);
+    return { success: false, error: error.message };
+  }
+});
+
 // ========================================
 // Window Control Handlers
 // ========================================
