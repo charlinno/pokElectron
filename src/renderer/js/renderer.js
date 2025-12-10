@@ -141,6 +141,11 @@ async function syncPokemonDatabase() {
  */
 async function forceSyncPokemonDatabase() {
   try {
+    // Ajouter l'animation au bouton refresh
+    const refreshBtn = document.getElementById('btn-refresh');
+    refreshBtn.classList.add('rotating');
+    refreshBtn.disabled = true;
+
     showLoading('Reinitialisation de la base de donnees...');
 
     // Vider la BD
@@ -148,6 +153,8 @@ async function forceSyncPokemonDatabase() {
     if (!resetResult.success) {
       showNotification('ERREUR', `Erreur: ${resetResult.error}`);
       hideLoading();
+      refreshBtn.classList.remove('rotating');
+      refreshBtn.disabled = false;
       return;
     }
 
@@ -173,6 +180,11 @@ async function forceSyncPokemonDatabase() {
     console.error('Erreur forceSyncPokemonDatabase:', error);
     hideLoading();
     showNotification('ERREUR', 'Impossible de synchroniser les Pokemons');
+  } finally {
+    // Arrêter l'animation du bouton
+    const refreshBtn = document.getElementById('btn-refresh');
+    refreshBtn.classList.remove('rotating');
+    refreshBtn.disabled = false;
   }
 }
 

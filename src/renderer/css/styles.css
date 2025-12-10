@@ -12,10 +12,15 @@ body {
   color: #333;
   display: flex;
   flex-direction: column;
+  padding-top: 32px; /* Hauteur de la barre de titre */
 }
 
 /* Barre de titre personnalisée */
 .title-bar {
+  position: fixed; /* Rendre la barre fixe */
+  top: 0;
+  left: 0;
+  right: 0;
   height: 32px;
   background: #667eea;
   display: flex;
@@ -27,6 +32,7 @@ body {
   user-select: none;
   -webkit-app-region: drag;
   gap: 10px;
+  z-index: 1000; /* S'assurer que la barre reste au-dessus */
 }
 
 .title-bar-content {
@@ -69,6 +75,24 @@ body {
 .title-bar-btn.close-btn:hover {
   background-color: #ff5f56;
   color: white;
+}
+
+.title-bar-btn.refresh-btn:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Animation de rotation pour le bouton refresh */
+.title-bar-btn.refresh-btn.rotating svg {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 #app {

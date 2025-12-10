@@ -13,6 +13,13 @@
       <span class="title-bar-title">Pokédex</span>
     </div>
     <div class="title-bar-controls">
+      <button id="btn-refresh" class="title-bar-btn refresh-btn" title="Charger tous les Pokemons" onclick="forceSyncPokemonDatabase()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="23 4 23 10 17 10"></polyline>
+          <polyline points="1 20 1 14 7 14"></polyline>
+          <path d="M3.51 9a9 9 0 0 1 14.85-3.36M20.49 15a9 9 0 0 1-14.85 3.36"></path>
+        </svg>
+      </button>
       <button id="btn-minimize" class="title-bar-btn minimize-btn" title="Reduire">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -61,9 +68,6 @@
           </button>
           <button class="btn btn-tertiary" onclick="showPage('capture-page')">
             Attraper des Pokémons
-          </button>
-          <button class="btn btn-secondary" onclick="forceSyncPokemonDatabase()" style="margin-top: 10px;">
-            Charger TOUS les Pokemons
           </button>
         </div>
 
@@ -118,7 +122,7 @@
               <h4>Stats</h4>
               <div class="stats-list">
                 <div class="stat-row">
-                  <span class="stat-name">Hauteur:</span>
+                  <span class="stat-name">Taille:</span>
                   <span id="details-height" class="stat-value"></span>
                 </div>
                 <div class="stat-row">
