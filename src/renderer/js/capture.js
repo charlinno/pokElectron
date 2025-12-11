@@ -309,6 +309,15 @@ async function capturePokemon() {
   try {
     clearTimeout(captureState.spawnTimeoutId);
 
+    // Déclencher l'animation de capture (halo blanc)
+    const pokemonImg = document.querySelector('.catchable-pokemon img');
+    if (pokemonImg) {
+      pokemonImg.classList.add('capturing');
+    }
+
+    // Attendre la fin de l'animation (0.6s) avant d'afficher le message de capture
+    await new Promise(resolve => setTimeout(resolve, 600));
+
     // Sauvegarder la capture en base de données
     const result = await window.pokemonAPI.capturePokemon(pokemon.id || pokemon.pokedex_id || pokemon.pokedexId);
 
