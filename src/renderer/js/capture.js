@@ -309,13 +309,41 @@ async function capturePokemon() {
   try {
     clearTimeout(captureState.spawnTimeoutId);
 
+    // Retirer la Pokéball cliquable si elle existe
+    removePokeball();
+
+    // Retirer toute Pokéball d'animation existante pour éviter les doublons
+    const captureArea = document.getElementById('capture-area');
+    const existingCaptureBall = captureArea.querySelector('.capture-pokeball-anim');
+    if (existingCaptureBall) {
+      existingCaptureBall.remove();
+    }
+
+    // Créer la Pokéball d'animation qui arrive de la droite
+    const captureBall = document.createElement('img');
+    captureBall.src = 'assets/Poké_Ball_icon.svg.png';
+    captureBall.className = 'capture-pokeball-anim from-right';
+    captureBall.onerror = () => {
+      captureBall.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png';
+    };
+
+    captureArea.appendChild(captureBall);
+
+    // Attendre que la Pokéball arrive au centre (1s)
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    // Retirer la Pokéball d'animation
+    if (captureBall.parentNode) {
+      captureBall.parentNode.removeChild(captureBall);
+    }
+
     // Déclencher l'animation de capture (halo blanc)
     const pokemonImg = document.querySelector('.catchable-pokemon img');
     if (pokemonImg) {
       pokemonImg.classList.add('capturing');
     }
 
-    // Attendre la fin de l'animation (0.6s) avant d'afficher le message de capture
+    // Attendre la fin de l'animation de capture (0.6s)
     await new Promise(resolve => setTimeout(resolve, 600));
 
     // Sauvegarder la capture en base de données
@@ -331,8 +359,6 @@ async function capturePokemon() {
         appState.capturedPokemon.push(localPokemon);
       }
 
-      // Retirer pokeball
-      removePokeball();
 
       // Afficher le Pokemon suivant après 2 secondes
       setTimeout(() => {

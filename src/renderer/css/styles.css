@@ -852,6 +852,66 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   animation: pokemonCaptureFlash 0.6s ease-out forwards;
 }
 
+/* Pokéball cliquable (bonus de dégâts x2) */
+.pokeball {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  z-index: 50;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.pokeball:hover {
+  transform: scale(1.1);
+  filter: drop-shadow(0 4px 8px rgba(255, 215, 0, 0.6));
+}
+
+.pokeball:active {
+  transform: scale(0.9);
+}
+
+/* Animation de la Pokéball de capture qui arrive de la droite */
+@keyframes pokeballCaptureFromRight {
+  0% {
+    right: -100px;
+    opacity: 0;
+    transform: translateY(-50%) rotate(0deg) scale(1);
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    right: 50%;
+    transform: translateY(-50%) translateX(50%) rotate(-720deg) scale(1);
+    opacity: 1;
+  }
+  90% {
+    transform: translateY(-50%) translateX(50%) rotate(-720deg) scale(1.2);
+  }
+  100% {
+    right: 50%;
+    transform: translateY(-50%) translateX(50%) rotate(-720deg) scale(0.8);
+    opacity: 1;
+  }
+}
+
+/* Pokéball d'animation de capture */
+.capture-pokeball-anim {
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  top: 50%;
+  z-index: 100;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+}
+
+.capture-pokeball-anim.from-right {
+  animation: pokeballCaptureFromRight 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
 /* Animation idle légère (flottement) */
 @keyframes pokemonIdle {
   0% { transform: translateY(0); }
