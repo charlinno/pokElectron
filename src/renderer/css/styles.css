@@ -650,24 +650,50 @@ body {
 
 .team-capture .team-slot-small {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   align-items: center;
-  padding: 8px;
-  border-radius: 8px;
-  background: rgba(255,255,255,0.05);
+  padding: 8px 12px; /* padding vertical réduit */
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.4); /* fond noir semi-transparent */
+  backdrop-filter: blur(4px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  min-height: 56px; /* hauteur réduite du background */
 }
 
-.team-capture img {
+.team-capture .team-slot-small:hover {
+  background: rgba(0, 0, 0, 0.5);
+  transform: translateX(4px);
+}
+
+/* Cercle contenant l'image du Pokémon */
+.team-capture .pokemon-circle {
   width: 64px;
-  height: 64px;
+  height: 64px; /* légèrement plus grand que le background */
+  min-width: 64px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15); /* cercle plus clair que le fond */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  margin: -4px 0; /* dépasse légèrement en haut et en bas */
+}
+
+.team-capture .pokemon-circle img {
+  width: 50px;
+  height: 50px;
   object-fit: contain;
-  background: transparent; /* enlever bloc blanc */
 }
 
 .team-capture p {
   color: white;
   font-weight: 600;
   text-transform: capitalize;
+  font-size: 0.95em;
+  margin: 0;
+  flex: 1;
 }
 
 .capture-right {
@@ -852,6 +878,51 @@ body {
   color: rgba(255, 255, 255, 0.9);
   font-style: italic;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Effet slash (animation rapide quand on clique sur le pokemon) */
+.slash-effect {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 10;
+}
+
+.slash-line {
+  position: absolute;
+  width: 3px;
+  height: 50%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.7));
+  transform-origin: center;
+  border-radius: 2px;
+  opacity: 0;
+  filter: drop-shadow(0 3px 6px rgba(0,0,0,0.2));
+  transform: rotate(var(--rot, 0deg));
+  animation: slashAnim 360ms cubic-bezier(.2,.9,.3,1) forwards;
+}
+
+@keyframes slashAnim {
+  0% {
+    opacity: 0;
+    transform: rotate(var(--rot,0deg)) scaleY(0.22) translateY(0);
+  }
+  30% {
+    opacity: 1;
+    transform: rotate(var(--rot,0deg)) scaleY(1.02) translateY(-4px);
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(var(--rot,0deg)) scaleY(1) translateY(-12px);
+  }
+}
+
+/* petite transition sur l'image lors du clic pour renforcer l'impact */
+.catchable-pokemon img:active {
+  transform: scale(0.96) translateY(-4px);
 }
 
 /* Responsive: sur mobile on empile */

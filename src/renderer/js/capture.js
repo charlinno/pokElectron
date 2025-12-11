@@ -61,7 +61,12 @@ function renderCaptureTeam() {
     for (let i = 0; i < 6; i++) {
       const slot = document.createElement('div');
       slot.className = 'team-slot-small';
-      slot.innerHTML = `<div style="width:64px;height:64px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.03);border-radius:8px;"><span style="color:rgba(255,255,255,0.5)">--</span></div><p>Vide</p>`;
+      slot.innerHTML = `
+        <div class="pokemon-circle">
+          <span style="color:rgba(255,255,255,0.4);font-size:1.2em;">--</span>
+        </div>
+        <p style="color:rgba(255,255,255,0.5);">Vide</p>
+      `;
       teamContainer.appendChild(slot);
     }
     return;
@@ -77,12 +82,27 @@ function renderCaptureTeam() {
       const pokemon = appState.allPokemon.find(p => p.id === slotData.pokemon_id || p.pokedex_id === slotData.pokemon_id);
       if (pokemon) {
         const imgSrc = pokemon.image_url || pokemon.sprites?.regular || 'https://via.placeholder.com/64';
-        slotEl.innerHTML = `<img src="${imgSrc}" alt="${pokemon.name}" onerror="this.src='https://via.placeholder.com/64'"/><p>${pokemon.name}</p>`;
+        slotEl.innerHTML = `
+          <div class="pokemon-circle">
+            <img src="${imgSrc}" alt="${pokemon.name}" onerror="this.src='https://via.placeholder.com/48'"/>
+          </div>
+          <p>${pokemon.name}</p>
+        `;
       } else {
-        slotEl.innerHTML = `<div style="width:64px;height:64px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.03);border-radius:8px;"><span style="color:rgba(255,255,255,0.5)">--</span></div><p>Vide</p>`;
+        slotEl.innerHTML = `
+          <div class="pokemon-circle">
+            <span style="color:rgba(255,255,255,0.4);font-size:1.2em;">--</span>
+          </div>
+          <p style="color:rgba(255,255,255,0.5);">Vide</p>
+        `;
       }
     } else {
-      slotEl.innerHTML = `<div style="width:64px;height:64px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.03);border-radius:8px;"><span style="color:rgba(255,255,255,0.5)">--</span></div><p>Vide</p>`;
+      slotEl.innerHTML = `
+        <div class="pokemon-circle">
+          <span style="color:rgba(255,255,255,0.4);font-size:1.2em;">--</span>
+        </div>
+        <p style="color:rgba(255,255,255,0.5);">Vide</p>
+      `;
     }
 
     teamContainer.appendChild(slotEl);
