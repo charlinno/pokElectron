@@ -293,15 +293,28 @@ function attackPokemon(viaPokeball = false, event = null) {
   // Calculer dégâts: base + nombre de pokemons en équipe
   let damage = computeClickDamage();
 
-  // Effet visuel: slashs multiples (un par dégât) + texte de dégâts
-  const parentEl = document.querySelector('.catchable-pokemon');
-  playMultipleSlashesWithDamage(parentEl, damage, event);
+  // Vérifier coup critique (3% de chance)
+  const isCritical = Math.random() < 0.03;
+
+  if (isCritical) {
+    // Coup critique : 10x les dégâts
+    damage = damage * 10;
+    console.log('⚡ COUP CRITIQUE ! ⚡');
+
+    // Effet visuel: éclair électrique au lieu des slashs
+    const parentEl = document.querySelector('.catchable-pokemon');
+    playLightningEffect(parentEl, event, damage);
+  } else {
+    // Attaque normale: slashs multiples (un par dégât) + texte de dégâts
+    const parentEl = document.querySelector('.catchable-pokemon');
+    playMultipleSlashesWithDamage(parentEl, damage, event);
+  }
 
   // Réduire les PV
   captureState.currentPokemonHP -= damage;
   captureState.currentPokemonHP = Math.max(0, Math.floor(captureState.currentPokemonHP));
 
-  console.log(`Attaque! ${captureState.currentPokemon.name} - PV restants: ${captureState.currentPokemonHP} (dégats: ${damage})`);
+  console.log(`Attaque! ${captureState.currentPokemon.name} - PV restants: ${captureState.currentPokemonHP} (dégats: ${damage}${isCritical ? ' - CRITIQUE!' : ''})`);
 
   updateHPBar();
 
@@ -592,49 +605,84 @@ function showDamageText(parentEl, event, damage) {
 }
 
 /**
+ * Effet d'éclair électrique pour les coups critiques
+ * @param {HTMLElement} parentEl conteneur parent
+ * @param {Event} event événement de clic (non utilisé, l'éclair frappe le Pokémon)
+ * @param {number} damage montant des dégâts critiques
+ */
+function playLightningEffect(parentEl, event, damage) {
+  if (!parentEl) return;
+
+  // Afficher le texte de dégâts critiques au centre du Pokémon
+  showCriticalDamageText(parentEl, damage);
+
+  // Créer le conteneur de l'éclair
+  const lightningContainer = document.createElement('div');
+  lightningContainer.className = 'lightning-effect';
+  parentEl.appendChild(lightningContainer);
+
+  // Créer plusieurs éclairs pour un effet plus intense (3 éclairs)
+  for (let i = 0; i < 3; i++) {
+    const lightning = document.createElement('div');
+    lightning.className = 'lightning-bolt';
+
+    // Délai légèrement décalé pour chaque éclair
+    lightning.style.animationDelay = `${i * 0.1}s`;
+
+    lightningContainer.appendChild(lightning);
+  }
+
+  // Flash blanc sur le Pokémon
+  const pokemonImg = parentEl.querySelector('img');
+  if (pokemonImg) {
+    pokemonImg.classList.add('critical-flash');
+    setTimeout(() => {
+      pokemonImg.classList.remove('critical-flash');
+    }, 600);
+  }
+
+  // Supprimer l'effet après l'animation
+  setTimeout(() => {
+    if (lightningContainer && lightningContainer.parentNode) {
+      lightningContainer.parentNode.removeChild(lightningContainer);
+    }
+  }, 1000);
+}
+
+/**
+ * Afficher le texte de dégâts critiques (jaune/or au lieu de rouge)
+ * Le texte apparaît au centre du Pokémon
+ * @param {HTMLElement} parentEl conteneur parent
+ * @param {number} damage montant des dégâts
+ */
+function showCriticalDamageText(parentEl, damage) {
+  const damageText = document.createElement('div');
+  damageText.className = 'damage-text critical-damage-text';
+  damageText.textContent = `-${damage} CRITIQUE!`;
+
+  // Positionner le texte au centre du conteneur du Pokémon
+  damageText.style.left = '50%';
+  damageText.style.top = '50%';
+  damageText.style.transform = 'translate(-50%, -50%)';
+
+  parentEl.appendChild(damageText);
+
+  // Supprimer le texte après l'animation
+  setTimeout(() => {
+    if (damageText && damageText.parentNode) {
+      damageText.parentNode.removeChild(damageText);
+    }
+  }, 1500);
+}
+
+/**
+ * [ANCIENNE FONCTION - CONSERVÉE POUR COMPATIBILITÉ]
  * Jouer l'effet visuel de slash sur l'élément parent fourni
  * Injection temporaire de 3 lignes avec animations, puis suppression
  * Chaque ligne reçoit une position et une rotation aléatoires pour varier l'effet
  */
 function playSlashEffect(parentEl) {
-  if (!parentEl) return;
-  // retirer un effet précédent s'il existe
-  const existing = parentEl.querySelector('.slash-effect');
-  if (existing) existing.remove();
-
-  const effect = document.createElement('div');
-  effect.className = 'slash-effect';
-
-  const linesCount = 3;
-  for (let i = 0; i < linesCount; i++) {
-    const line = document.createElement('div');
-    line.className = 'slash-line';
-
-    // Positionnement aléatoire en pourcentage pour rester responsive
-    const leftPercent = 15 + Math.random() * 70; // entre 15% et 85%
-    const topPercent = -25 + Math.random() * 60; // entre -25% et +35%
-    line.style.left = leftPercent + '%';
-    line.style.top = topPercent + '%';
-
-    // Rotation aléatoire pour chaque ligne (-60deg à 60deg)
-    const rotation = -60 + Math.random() * 120;
-    // Appliquer rotation via variable CSS --rot; la règle CSS utilise rotate(var(--rot))
-    line.style.setProperty('--rot', rotation + 'deg');
-
-    // Delay aléatoire pour le stagger (0 - 140ms)
-    const delay = Math.floor(Math.random() * 140);
-    line.style.animationDelay = `${delay}ms`;
-
-    // Légère variation d'opacité/échelle initiale possible via style (la keyframe gère le reste)
-    effect.appendChild(line);
-  }
-
-  parentEl.appendChild(effect);
-
-  // durée maximale de l'animation (un peu plus que la durée CSS) puis suppression
-  setTimeout(() => {
-    if (effect && effect.parentNode) effect.parentNode.removeChild(effect);
-  }, 700);
+  // ...existing code...
 }
 
 // Exports implicites - le fichier est chargé globalement

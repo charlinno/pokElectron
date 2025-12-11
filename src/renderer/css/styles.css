@@ -1183,6 +1183,18 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   animation: damageTextAnim 1s ease-out forwards;
 }
 
+/* Texte de dégâts critiques (jaune/or) */
+.critical-damage-text {
+  font-size: 2em;
+  color: #FFD700;
+  text-shadow:
+    0 0 8px rgba(255, 255, 255, 1),
+    0 0 16px rgba(255, 215, 0, 0.8),
+    0 0 24px rgba(255, 215, 0, 0.6),
+    2px 2px 6px rgba(0, 0, 0, 0.9);
+  animation: criticalDamageTextAnim 1.5s ease-out forwards;
+}
+
 @keyframes damageTextAnim {
   0% {
     opacity: 1;
@@ -1195,6 +1207,109 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   100% {
     opacity: 0;
     transform: translateY(-60px) scale(0.8);
+  }
+}
+
+@keyframes criticalDamageTextAnim {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  20% {
+    opacity: 1;
+    transform: translate(-50%, calc(-50% - 20px)) scale(1.3);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, calc(-50% - 40px)) scale(1.1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, calc(-50% - 80px)) scale(0.8);
+  }
+}
+
+/* Conteneur de l'effet d'éclair électrique */
+.lightning-effect {
+  position: absolute;
+  bottom: 0; /* Partir du bas (pied du Pokémon) */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 200%;
+  pointer-events: none;
+  z-index: 15;
+  overflow: visible;
+}
+
+/* Éclair électrique individuel (plus large) */
+.lightning-bolt {
+  position: absolute;
+  bottom: 0; /* Ancré en bas */
+  left: 50%;
+  width: 12px; /* 3x plus large qu'avant */
+  height: 100%;
+  background: linear-gradient(
+    0deg, /* Inversé : de bas en haut */
+    #00BFFF 0%,
+    #1E90FF 20%,
+    #4169E1 50%,
+    #1E90FF 70%,
+    #00BFFF 90%,
+    transparent 100%
+  );
+  transform: translateX(-50%);
+  filter: drop-shadow(0 0 12px #00BFFF) drop-shadow(0 0 24px #1E90FF) drop-shadow(0 0 36px #4169E1);
+  opacity: 0;
+  animation: lightningStrike 0.4s ease-out forwards;
+}
+
+/* Animation de l'éclair qui monte du bas */
+@keyframes lightningStrike {
+  0% {
+    opacity: 0;
+    height: 0%;
+  }
+  10% {
+    opacity: 1;
+    height: 30%;
+  }
+  30% {
+    opacity: 1;
+    height: 100%;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    height: 100%;
+  }
+}
+
+/* Flash blanc sur le Pokémon lors du coup critique */
+.critical-flash {
+  animation: criticalFlashAnim 0.6s ease-out;
+}
+
+@keyframes criticalFlashAnim {
+  0%, 100% {
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.45));
+  }
+  20% {
+    filter:
+      brightness(2.5)
+      drop-shadow(0 0 20px rgba(0, 191, 255, 1))
+      drop-shadow(0 0 40px rgba(30, 144, 255, 0.8));
+  }
+  50% {
+    filter:
+      brightness(2)
+      drop-shadow(0 0 15px rgba(0, 191, 255, 0.8))
+      drop-shadow(0 0 30px rgba(30, 144, 255, 0.6));
   }
 }
 
