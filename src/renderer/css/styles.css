@@ -812,7 +812,7 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   justify-content: center;
   margin-bottom: 0;
   position: relative;
-  overflow: visible; /* permettre pokeball en dehors */
+  overflow: hidden; /* Empêcher les animations de déborder */
 }
 
 .instruction {
@@ -829,6 +829,8 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   cursor: pointer;
   position: relative;
   animation: pokemonIdle 1.4s ease-in-out infinite alternate; /* idle léger */
+  max-width: 100%;
+  max-height: 100%;
 }
 
 /* Désactiver les interactions pendant la capture */
@@ -843,17 +845,18 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   object-fit: contain;
   filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.45));
   background: transparent; /* enlever bloc blanc */
+  will-change: transform, filter; /* Optimisation pour les animations */
 }
 
 /* Animation de capture avec halo blanc (déclenchée par JS) */
 @keyframes pokemonCaptureFlash {
   0% {
-    transform: scale(1);
+    transform: scale(1) translateZ(0);
     filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.45));
     opacity: 1;
   }
   20% {
-    transform: scale(1.1);
+    transform: scale(1.05) translateZ(0); /* Réduit l'expansion */
     filter:
       brightness(2.5)
       drop-shadow(0 0 25px rgba(255, 255, 255, 1))
@@ -861,7 +864,7 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
     opacity: 1;
   }
   50% {
-    transform: scale(0.5);
+    transform: scale(0.5) translateZ(0);
     filter:
       brightness(3)
       drop-shadow(0 0 40px rgba(255, 255, 255, 1))
@@ -870,7 +873,7 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
     opacity: 0.8;
   }
   80% {
-    transform: scale(0.2);
+    transform: scale(0.2) translateZ(0);
     filter:
       brightness(4)
       drop-shadow(0 0 60px rgba(255, 255, 255, 1))
@@ -878,7 +881,7 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
     opacity: 0.3;
   }
   100% {
-    transform: scale(0);
+    transform: scale(0) translateZ(0);
     filter:
       brightness(5)
       drop-shadow(0 0 80px rgba(255, 255, 255, 1));
@@ -889,6 +892,7 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
 /* Classe pour déclencher l'animation de capture */
 .catchable-pokemon img.capturing {
   animation: pokemonCaptureFlash 0.6s ease-out forwards;
+  transform-origin: center center; /* S'assurer que le scale part du centre */
 }
 
 /* Pokéball cliquable (bonus de dégâts x2) */
