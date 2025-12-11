@@ -19,7 +19,7 @@ const captureState = {
 };
 
 const BASE_CLICK_DAMAGE = 1; // dégâts de base par clic
-const POKEBALL_CHANCE = 0.5; // 50% de chance d'apparition
+const POKEBALL_CHANCE = 0.1; // 10% de chance d'apparition (5x plus rare)
 
 async function loadCapturePage() {
   console.log('Page capture chargee');
@@ -270,7 +270,7 @@ function updateHPBar() {
 
 /**
  * Attaquer le Pokemon (réduire ses PV)
- * @param {boolean} viaPokeball indique si le clic provient de la pokéball (double dégâts)
+ * @param {boolean} viaPokeball indique si le clic provient de la pokéball (capture instantanée)
  */
 function attackPokemon(viaPokeball = false) {
   if (!captureState.currentPokemon) return;
@@ -278,15 +278,23 @@ function attackPokemon(viaPokeball = false) {
   // Bloquer les clics pendant l'animation de capture
   if (captureState.isCapturing) return;
 
-  // Effet visuel: slash uniquement si clic normal (pas depuis la pokéball)
-  if (!viaPokeball) {
-    const parentEl = document.querySelector('.catchable-pokemon');
-    playSlashEffect(parentEl);
+  // Si clic sur la Pokéball : capture instantanée
+  if (viaPokeball) {
+    console.log('🎯 Pokéball cliquée ! Capture instantanée !');
+    captureState.currentPokemonHP = 0;
+    updateHPBar();
+    // Activer le flag pour bloquer les clics
+    captureState.isCapturing = true;
+    capturePokemon();
+    return;
   }
+
+  // Effet visuel: slash pour clic normal
+  const parentEl = document.querySelector('.catchable-pokemon');
+  playSlashEffect(parentEl);
 
   // Calculer dégâts: base + nombre de pokemons en équipe
   let damage = computeClickDamage();
-  if (viaPokeball) damage = damage * 2;
 
   // Réduire les PV
   captureState.currentPokemonHP -= damage;
