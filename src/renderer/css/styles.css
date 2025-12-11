@@ -7,6 +7,7 @@
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  /* Fond global assombri uniquement pour l'arrière-plan */
   background-color: #000000;
   background-image:
     linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
@@ -18,7 +19,7 @@ body {
   color: #333;
   display: flex;
   flex-direction: column;
-  padding-top: 32px;
+  padding-top: 32px; /* Hauteur de la barre de titre */
 }
 
 .title-bar {
@@ -753,8 +754,8 @@ body {
   user-select: none;
 }
 
-/* Remove white backgrounds in many components to respect user's instruction */
-.pokemon-card,
+/* Supprimer la neutralisation globale des backgrounds pour ne pas filtrer les cartes/boutons */
+/* .pokemon-card,
 .stat-card,
 .page-header,
 .slot-content,
@@ -762,7 +763,7 @@ body {
 .empty-state,
 .modal-content {
   background: linear-gradient(transparent, transparent);
-}
+} */
 
 /* Responsive: sur mobile on empile */
 @media (max-width: 900px) {
@@ -831,4 +832,31 @@ body {
   .details-info h3 {
     font-size: 1.5em;
   }
+}
+
+.pokemon-details-container {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 30px;
+  background: transparent;
+  padding: 0;
+}
+
+.details-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  padding: 20px 0;
+}
+
+.details-info {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  padding: 20px 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.details-stats .stat-row {
+  background: #f5f5f5;
 }

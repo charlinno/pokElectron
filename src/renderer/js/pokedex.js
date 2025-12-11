@@ -35,6 +35,7 @@ async function loadPokédexPage() {
  * Créer une carte Pokémon
  */
 function createPokemonCard(pokemon) {
+  console.log('Pokemon data', pokemon);
   const card = document.createElement('div');
   card.className = `pokemon-card ${pokemon.is_captured ? 'captured' : 'uncaptured'}`;
   card.style.cursor = 'pointer';
@@ -93,14 +94,14 @@ function createPokemonCard(pokemon) {
  */
 function showPokemonDetails(pokemon) {
   // Mettre à jour le contenu de la page de détails
+  console.log('Afficher les details pour', pokemon);
   document.getElementById('details-title').textContent = pokemon.name;
   document.getElementById('details-image').src = pokemon.image_url || 'https://via.placeholder.com/200';
   document.getElementById('details-name').textContent = pokemon.name;
   document.getElementById('details-id').textContent = `#${pokemon.pokedex_id}`;
   document.getElementById('details-height').textContent = pokemon.height ? `${pokemon.height} m` : 'N/A';
   document.getElementById('details-weight').textContent = pokemon.weight ? `${pokemon.weight} kg` : 'N/A';
-  // Utiliser stats.hp si présent
-  document.getElementById('details-hp').textContent = (pokemon.stats && typeof pokemon.stats.hp !== 'undefined') ? pokemon.stats.hp : (pokemon.hp || 'N/A');
+  document.getElementById('details-hp').textContent = pokemon.hp ? `${pokemon.hp}` : 'N/A';
 
   // Afficher les types
   const typesList = document.getElementById('details-types-list');

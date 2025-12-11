@@ -117,7 +117,6 @@ function startCaptures() {
 function spawnNextPokemon() {
   if (!captureState.isActive) return;
 
-  // Choisir un Pokemon aléatoire non capturé
   const uncapturedPokemons = appState.allPokemon.filter(p => !p.is_captured);
 
   if (uncapturedPokemons.length === 0) {
@@ -128,20 +127,22 @@ function spawnNextPokemon() {
   const randomIndex = Math.floor(Math.random() * uncapturedPokemons.length);
   captureState.currentPokemon = uncapturedPokemons[randomIndex];
 
-  // Les PV initiaux = stats.hp du Pokemon
-  const hpFromStats = captureState.currentPokemon.stats?.hp ?? captureState.currentPokemon.hp ?? 20;
-  captureState.maxPokemonHP = hpFromStats;
-  captureState.currentPokemonHP = captureState.maxPokemonHP;
+  // PV initiaux : utiliser le champ `hp` déjà transformé par l'API (transformPokemonData)
+  let maxHp = 20;
+  if (typeof captureState.currentPokemon.hp !== 'undefined') {
+    maxHp = captureState.currentPokemon.hp;
+  }
 
-  // Afficher le Pokemon avec ses PV
+  captureState.maxPokemonHP = maxHp;
+  captureState.currentPokemonHP = maxHp;
+
   displayPokemonWithHP(captureState.currentPokemon);
 
-  // Planifier le prochain Pokemon après spawnInterval
   clearTimeout(captureState.spawnTimeoutId);
   captureState.spawnTimeoutId = setTimeout(() => {
     if (captureState.currentPokemon && captureState.isActive) {
       console.log(`Pokemon ${captureState.currentPokemon.name} a echappe`);
-      spawnNextPokemon(); // Faire apparaitre le suivant
+      spawnNextPokemon();
     }
   }, captureState.spawnInterval);
 }

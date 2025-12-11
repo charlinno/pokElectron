@@ -191,13 +191,20 @@ class APIService {
         '';
 
       // Récupérer les PV (HP) depuis les stats
+      // javascript
+// Récupérer les PV (HP) depuis les stats
       let hp = 20; // Valeur par défaut
       if (apiPokemon.stats && Array.isArray(apiPokemon.stats)) {
-        const hpStat = apiPokemon.stats.find(stat => stat.stat.name === 'hp');
-        if (hpStat) {
-          hp = Math.ceil(hpStat.base_stat / 5); // Diviser par 5 pour avoir des valeurs raisonnables
+
+        const hpStat = apiPokemon.stats[0]?.base_stat;
+
+        console.log('hpStat pour', apiPokemon.name, ':', hpStat);
+
+        if (hpStat != null) {
+          hp = hpStat;
         }
       }
+
 
       return {
         pokedex_id: apiPokemon.id,
@@ -205,9 +212,9 @@ class APIService {
         image_url: spriteUrl,
         type_primary: typePrimary,
         type_secondary: typeSecondary,
-        height: apiPokemon.height / 10, // Convertir en mètres
-        weight: apiPokemon.weight / 10, // Convertir en kg
-        hp: hp,
+        height: apiPokemon.height / 10,
+        weight: apiPokemon.weight / 10,
+        hp: apiPokemon.stats[0]?.base_stat || hp,
         is_captured: 0,
         created_at: new Date().toISOString()
       };

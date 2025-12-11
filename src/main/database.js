@@ -104,20 +104,21 @@ class Database {
   insertPokemon(pokemon) {
     return new Promise((resolve, reject) => {
       const sql = `
-        INSERT INTO pokemon (pokedex_id, name, image_url, type_primary, type_secondary, height, weight)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO pokemon (pokedex_id, name, image_url, type_primary, type_secondary, height, weight, hp)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
       `;
 
       this.db.run(
-        sql,
-        [
-          pokemon.pokedex_id,
-          pokemon.name,
-          pokemon.image_url,
-          pokemon.type_primary,
-          pokemon.type_secondary,
-          pokemon.height,
-          pokemon.weight
+          sql,
+          [
+            pokemon.pokedex_id,
+            pokemon.name,
+            pokemon.image_url,
+            pokemon.type_primary,
+            pokemon.type_secondary,
+            pokemon.height,
+            pokemon.weight,
+            pokemon.hp
         ],
         function(err) {
           if (err) {

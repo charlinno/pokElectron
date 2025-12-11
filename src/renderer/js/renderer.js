@@ -89,6 +89,7 @@ async function loadAllPokemon() {
     showLoading('Chargement des Pokémons...');
 
     const pokemons = await window.pokemonAPI.getAllPokemon();
+    console.log('Pokemons depuis DB:', pokemons.slice(0, 3));
     appState.allPokemon = pokemons;
 
     console.log(`${pokemons.length} Pokemons charges`);
