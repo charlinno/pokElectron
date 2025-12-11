@@ -14,7 +14,8 @@ const captureState = {
   maxPokemonHP: 0,
   spawnTimeoutId: null,
   spawnInterval: 5000, // Nouveau Pokemon toutes les 5 secondes
-  pokeballElement: null
+  pokeballElement: null,
+  isCapturing: false // Bloque les clics pendant l'animation de capture
 };
 
 const BASE_CLICK_DAMAGE = 1; // dégâts de base par clic
@@ -274,6 +275,9 @@ function updateHPBar() {
 function attackPokemon(viaPokeball = false) {
   if (!captureState.currentPokemon) return;
 
+  // Bloquer les clics pendant l'animation de capture
+  if (captureState.isCapturing) return;
+
   // Effet visuel: slash uniquement si clic normal (pas depuis la pokéball)
   if (!viaPokeball) {
     const parentEl = document.querySelector('.catchable-pokemon');
@@ -294,6 +298,8 @@ function attackPokemon(viaPokeball = false) {
 
   // Si les PV atteignent 0, capturer le Pokemon
   if (captureState.currentPokemonHP <= 0) {
+    // Activer le flag pour bloquer les clics
+    captureState.isCapturing = true;
     capturePokemon();
   }
 }
@@ -311,6 +317,12 @@ async function capturePokemon() {
 
     // Retirer la Pokéball cliquable si elle existe
     removePokeball();
+
+    // Désactiver visuellement les interactions sur le Pokémon
+    const catchablePokemon = document.querySelector('.catchable-pokemon');
+    if (catchablePokemon) {
+      catchablePokemon.classList.add('capturing-in-progress');
+    }
 
     // Retirer toute Pokéball d'animation existante pour éviter les doublons
     const captureArea = document.getElementById('capture-area');
@@ -363,12 +375,16 @@ async function capturePokemon() {
       // Afficher le Pokemon suivant après 2 secondes
       setTimeout(() => {
         if (captureState.isActive) {
+          // Réactiver les clics pour le prochain Pokémon
+          captureState.isCapturing = false;
           spawnNextPokemon();
         }
       }, 2000);
     }
   } catch (error) {
     console.error('Erreur capture:', error);
+    // Réactiver les clics en cas d'erreur
+    captureState.isCapturing = false;
   }
 }
 

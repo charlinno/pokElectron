@@ -798,6 +798,12 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   animation: pokemonIdle 1.4s ease-in-out infinite alternate; /* idle léger */
 }
 
+/* Désactiver les interactions pendant la capture */
+.catchable-pokemon.capturing-in-progress {
+  pointer-events: none;
+  cursor: default;
+}
+
 .catchable-pokemon img {
   width: 180px;
   height: 180px;
