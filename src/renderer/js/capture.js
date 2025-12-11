@@ -112,6 +112,35 @@ function startCaptures() {
 }
 
 /**
+ * Obtenir les PV d'un objet Pokémon en essayant plusieurs chemins possibles
+ * Supporte : pokemon.hp ; pokemon.stats.hp ; pokemon.stats[0].base_stat ; pokemon.stats.find(s=>s.name==='hp').base_stat
+ */
+function getPokemonHP(pokemon) {
+  if (!pokemon) return undefined;
+  // 1) propriété hp directe
+  if (typeof pokemon.hp === 'number') return pokemon.hp;
+
+  // 2) stats objet { hp: ... }
+  if (pokemon.stats && typeof pokemon.stats.hp === 'number') return pokemon.stats.hp;
+
+  // 3) stats array with base_stat at index 0
+  if (Array.isArray(pokemon.stats) && pokemon.stats[0] && typeof pokemon.stats[0].base_stat === 'number') {
+    return pokemon.stats[0].base_stat;
+  }
+
+  // 4) find hp by name inside stats array
+  if (Array.isArray(pokemon.stats)) {
+    const hpEntry = pokemon.stats.find(s => s && (s.name === 'hp' || s.stat === 'hp') && (typeof s.base_stat === 'number'));
+    if (hpEntry) return hpEntry.base_stat;
+  }
+
+  // 5) legacy fields
+  if (typeof pokemon.base_hp === 'number') return pokemon.base_hp;
+
+  return undefined;
+}
+
+/**
  * Faire apparaitre le prochain Pokemon
  */
 function spawnNextPokemon() {
@@ -127,10 +156,13 @@ function spawnNextPokemon() {
   const randomIndex = Math.floor(Math.random() * uncapturedPokemons.length);
   captureState.currentPokemon = uncapturedPokemons[randomIndex];
 
-  // PV initiaux : utiliser le champ `hp` déjà transformé par l'API (transformPokemonData)
-  let maxHp = 20;
-  if (typeof captureState.currentPokemon.hp !== 'undefined') {
-    maxHp = captureState.currentPokemon.hp;
+  // PV initiaux : essayer d'obtenir via getPokemonHP
+  let maxHp = 20; // fallback
+  const hpFromData = getPokemonHP(captureState.currentPokemon);
+  if (typeof hpFromData === 'number') {
+    maxHp = hpFromData;
+  } else {
+    console.warn('spawnNextPokemon: impossible de récupérer les PV depuis l\'objet pokemon, fallback à', maxHp, 'pokemon:', captureState.currentPokemon);
   }
 
   captureState.maxPokemonHP = maxHp;
@@ -161,7 +193,6 @@ function displayPokemonWithHP(pokemon) {
   catchable.className = 'catchable-pokemon';
   catchable.innerHTML = `
     <img id="capture-pokemon-img" src="${pokemon.image_url || pokemon.sprites?.regular || 'https://via.placeholder.com/150'}" alt="${pokemon.name}" />
-    <p id="capture-pokemon-name">${pokemon.name}</p>
   `;
 
   // Clic sur l'image principal attaque (clic normal)
@@ -169,8 +200,7 @@ function displayPokemonWithHP(pokemon) {
 
   captureArea.appendChild(catchable);
 
-  // Afficher les PV dans la colonne de stats
-  document.getElementById('capture-pokemon-img').src = pokemon.image_url || pokemon.sprites?.regular || 'https://via.placeholder.com/150';
+  // Afficher le nom et les PV dans la colonne de stats
   document.getElementById('capture-pokemon-name').textContent = pokemon.name;
   updateHPBar();
   pokemonInfo.style.display = 'flex';
@@ -185,34 +215,50 @@ function displayPokemonWithHP(pokemon) {
 }
 
 /**
- * Mettre à jour la barre de PV
+ * Mettre à jour la barre de PV avec style classique (vert → jaune → rouge)
  */
 function updateHPBar() {
-  const hpPercent = (captureState.currentPokemonHP / captureState.maxPokemonHP) * 100;
+  const max = captureState.maxPokemonHP || 0;
+  const current = typeof captureState.currentPokemonHP === 'number' ? captureState.currentPokemonHP : 0;
+
   const hpBar = document.getElementById('pokemon-hp-bar');
   const hpText = document.getElementById('pokemon-hp-text');
 
   if (!hpBar || !hpText) return;
 
-  hpBar.style.width = Math.max(0, Math.min(100, hpPercent)) + '%';
-  hpText.textContent = `PV: ${captureState.currentPokemonHP}/${captureState.maxPokemonHP}`;
+  const hpPercent = max > 0 ? (current / max) * 100 : 0;
 
-  // Couleur unique (plus simple)
+  hpBar.style.width = Math.max(0, Math.min(100, hpPercent)) + '%';
+  hpText.textContent = `PV: ${current}/${max}`;
+
+  // Couleur de la barre selon le pourcentage (style classique Pokémon)
+  // Supprimer les anciennes classes
+  hpBar.classList.remove('hp-high', 'hp-medium', 'hp-low');
+
   if (hpPercent > 50) {
-    hpBar.style.background = '#4caf50';
+    hpBar.classList.add('hp-high');
+    hpBar.style.background = '#4caf50'; // vert
   } else if (hpPercent > 25) {
-    hpBar.style.background = '#ff9800';
+    hpBar.classList.add('hp-medium');
+    hpBar.style.background = '#ffb300'; // jaune/orange
   } else {
-    hpBar.style.background = '#ff5722';
+    hpBar.classList.add('hp-low');
+    hpBar.style.background = '#f44336'; // rouge
   }
 }
 
 /**
  * Attaquer le Pokemon (réduire ses PV)
- * @param {boolean} viaPokeball indique si le clic provient de la pokeball (double dégâts)
+ * @param {boolean} viaPokeball indique si le clic provient de la pokéball (double dégâts)
  */
 function attackPokemon(viaPokeball = false) {
   if (!captureState.currentPokemon) return;
+
+  // Effet visuel: slash uniquement si clic normal (pas depuis la pokéball)
+  if (!viaPokeball) {
+    const parentEl = document.querySelector('.catchable-pokemon');
+    playSlashEffect(parentEl);
+  }
 
   // Calculer dégâts: base + nombre de pokemons en équipe
   let damage = computeClickDamage();
@@ -369,6 +415,52 @@ function getRandomCaptureMessage() {
     'C\'est un succes!'
   ];
   return messages[Math.floor(Math.random() * messages.length)];
+}
+
+/**
+ * Jouer l'effet visuel de slash sur l'élément parent fourni
+ * Injection temporaire de 3 lignes avec animations, puis suppression
+ * Chaque ligne reçoit une position et une rotation aléatoires pour varier l'effet
+ */
+function playSlashEffect(parentEl) {
+  if (!parentEl) return;
+  // retirer un effet précédent s'il existe
+  const existing = parentEl.querySelector('.slash-effect');
+  if (existing) existing.remove();
+
+  const effect = document.createElement('div');
+  effect.className = 'slash-effect';
+
+  const linesCount = 3;
+  for (let i = 0; i < linesCount; i++) {
+    const line = document.createElement('div');
+    line.className = 'slash-line';
+
+    // Positionnement aléatoire en pourcentage pour rester responsive
+    const leftPercent = 15 + Math.random() * 70; // entre 15% et 85%
+    const topPercent = -25 + Math.random() * 60; // entre -25% et +35%
+    line.style.left = leftPercent + '%';
+    line.style.top = topPercent + '%';
+
+    // Rotation aléatoire pour chaque ligne (-60deg à 60deg)
+    const rotation = -60 + Math.random() * 120;
+    // Appliquer rotation via variable CSS --rot; la règle CSS utilise rotate(var(--rot))
+    line.style.setProperty('--rot', rotation + 'deg');
+
+    // Delay aléatoire pour le stagger (0 - 140ms)
+    const delay = Math.floor(Math.random() * 140);
+    line.style.animationDelay = `${delay}ms`;
+
+    // Légère variation d'opacité/échelle initiale possible via style (la keyframe gère le reste)
+    effect.appendChild(line);
+  }
+
+  parentEl.appendChild(effect);
+
+  // durée maximale de l'animation (un peu plus que la durée CSS) puis suppression
+  setTimeout(() => {
+    if (effect && effect.parentNode) effect.parentNode.removeChild(effect);
+  }, 700);
 }
 
 // Exports implicites - le fichier est chargé globalement

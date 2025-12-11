@@ -199,13 +199,14 @@
 
             <div class="capture-stats">
               <div id="pokemon-to-catch" class="pokemon-info" style="display: none;">
-<!--                <img id="capture-pokemon-img" src="" alt="Pokemon" class="pokemon-img-large" onclick="attackPokemon(false)">-->
-                <p id="capture-pokemon-name"></p>
-                <div class="hp-container">
-                  <div class="hp-bar">
-                    <div id="pokemon-hp-bar" class="hp-fill"></div>
+                <!-- Nom du Pokemon au-dessus de tout -->
+                <p id="capture-pokemon-name" class="pokemon-name-display"></p>
+                <!-- Barre de vie classique -->
+                <div class="hp-bar-classic">
+                  <div class="hp-bar-bg">
+                    <div id="pokemon-hp-bar" class="hp-bar-fill"></div>
                   </div>
-                  <p id="pokemon-hp-text" class="hp-text"></p>
+                  <p id="pokemon-hp-text" class="hp-bar-text"></p>
                 </div>
                 <p id="capture-hint" class="capture-hint">Clique pour attaquer!</p>
               </div>

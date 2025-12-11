@@ -5,6 +5,11 @@
   box-sizing: border-box;
 }
 
+/* Valeurs CSS par défaut */
+:root {
+  --rot: 0deg;
+}
+
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   /* Fond global assombri uniquement pour l'arrière-plan */
@@ -179,11 +184,11 @@ body {
 .stat-number {
   font-size: 2.5em;
   font-weight: bold;
-  color: white;
+  color: black;
 }
 
 .stat-label {
-  color: white;
+  color: black;
   margin-top: 5px;
   font-size: 0.9em;
 }
@@ -696,8 +701,8 @@ body {
   align-items: center;
   gap: 10px;
   cursor: pointer;
-  animation: bounce 0.6s ease-in-out infinite;
   position: relative;
+  animation: pokemonIdle 1.4s ease-in-out infinite alternate; /* idle léger */
 }
 
 .catchable-pokemon img {
@@ -708,62 +713,146 @@ body {
   background: transparent; /* enlever bloc blanc */
 }
 
-/* Pokemon-info (stat box) : rendre transparent et sans fond blanc */
+/* Animation idle légère (flottement) */
+@keyframes pokemonIdle {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-6px); }
+}
+
+/* Pokemon-info: affichage des infos de capture */
 .pokemon-info {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 15px;
-  background: transparent; /* enlever bloc blanc */
+  gap: 12px;
+  background: transparent;
   border-radius: 10px;
   padding: 10px;
   max-width: 420px;
   margin: 0 auto;
   box-shadow: none;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.pokemon-img-large {
-  width: 160px;
-  height: 160px;
-  object-fit: contain;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  background: transparent; /* enlever bloc blanc */
+/* Nom du Pokémon au-dessus de la barre de vie */
+.pokemon-name-display {
+  font-size: 1.2em;
+  font-weight: 700;
+  text-transform: capitalize;
+  color: #fff;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+  margin: 0 0 8px 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  text-align: center;
 }
 
-/* HP bar adjustments: enlever les dégradés (conforme demande précédente) et utiliser couleur unie */
-.hp-fill {
-  height: 100%;
-  background: #4caf50; /* couleur unique pour fill */
-  transition: width 0.2s ease;
+/* Barre de vie classique (style Pokémon) */
+.hp-bar-classic {
+  width: 100%;
+  max-width: 360px;
   display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.hp-bar-bg {
+  width: 100%;
+  height: 24px;
+  background: #333;
+  border-radius: 12px;
+  border: 3px solid #222;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.5), 0 2px 4px rgba(255,255,255,0.1);
+  overflow: hidden;
+  position: relative;
+}
+
+.hp-bar-fill {
+  height: 100%;
+  width: 100%;
+  border-radius: 8px;
+  transition: width 0.3s ease, background-color 0.3s ease;
+  background: #4caf50; /* vert par défaut */
+  box-shadow: inset 0 -2px 4px rgba(0,0,0,0.2);
+}
+
+/* Couleurs de la barre selon le pourcentage (gérées par JS mais définies ici) */
+.hp-bar-fill.hp-high {
+  background: #4caf50; /* vert */
+}
+
+.hp-bar-fill.hp-medium {
+  background: #ffb300; /* jaune/orange */
+}
+
+.hp-bar-fill.hp-low {
+  background: #f44336; /* rouge */
+}
+
+.hp-bar-text {
+  text-align: center;
+  font-size: 0.9em;
+  font-weight: 600;
+  color: #fff;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.capture-hint {
+  font-size: 0.85em;
+  color: rgba(255,255,255,0.75);
+  font-style: italic;
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Supprimer les anciens styles de barre de vie */
+/* .hp-row, .hp-line, .hp-name, .hp-text, .hp-container déjà supprimés ou remplacés */
+
+/* Message de capture success */
+.capture-success {
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  font-weight: bold;
-  color: white;
+  gap: 15px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  animation: fadeIn 0.5s ease-in;
 }
 
-/* Pokéball style (positionnement absolu, zone cliquable) */
-.pokeball {
-  position: absolute;
-  width: 48px;
-  height: 48px;
-  cursor: pointer;
-  z-index: 50;
-  user-select: none;
+.capture-success h2 {
+  font-size: 2.5em;
+  font-weight: 700;
+  color: #4caf50;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Supprimer la neutralisation globale des backgrounds pour ne pas filtrer les cartes/boutons */
-/* .pokemon-card,
-.stat-card,
-.page-header,
-.slot-content,
-.pokemon-select-card,
-.empty-state,
-.modal-content {
-  background: linear-gradient(transparent, transparent);
-} */
+.capture-success img {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+}
+
+.capture-success p {
+  font-size: 1.3em;
+  font-weight: 600;
+  color: #fff;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+  margin: 0;
+  text-transform: capitalize;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.capture-success .message {
+  font-size: 1.1em;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  font-style: italic;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 
 /* Responsive: sur mobile on empile */
 @media (max-width: 900px) {
