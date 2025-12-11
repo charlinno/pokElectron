@@ -55,7 +55,7 @@
           </div>
           <div class="stat-card">
             <div class="stat-number" id="total-count">0</div>
-            <div class="stat-label">Total disponibles</div>
+            <div class="stat-label">Pokedex National</div>
           </div>
         </div>
 
@@ -67,7 +67,9 @@
             Gérer mon Équipe
           </button>
           <button class="btn btn-tertiary" onclick="showPage('capture-page')">
-            Attraper des Pokémons
+            <div class="catch-btn">
+              Attraper des Pokémons
+            </div>
           </button>
         </div>
 
@@ -180,22 +182,33 @@
         </div>
 
         <div class="capture-container">
-          <div class="capture-area" id="capture-area">
-            <!-- Les Pokémons apparaîtront ici -->
-            <p class="instruction">Clique sur les Pokemons pour les affaiblir et les capturer!</p>
+          <!-- Colonne gauche = équipe (toujours visible) -->
+          <div class="capture-left">
+            <h3>Mon Équipe</h3>
+            <div id="capture-team" class="team-capture">
+              <!-- Slots d'équipe affichés ici (6) -->
+            </div>
           </div>
 
-          <div class="capture-stats">
-            <div id="pokemon-to-catch" class="pokemon-info" style="display: none;">
-              <img id="capture-pokemon-img" src="" alt="Pokemon" class="pokemon-img-large" onclick="attackPokemon()">
-              <p id="capture-pokemon-name"></p>
-              <div class="hp-container">
-                <div class="hp-bar">
-                  <div id="pokemon-hp-bar" class="hp-fill"></div>
+          <!-- Colonne droite = zone de capture + stats -->
+          <div class="capture-right">
+            <div class="capture-area" id="capture-area">
+              <!-- Les Pokémons apparaîtront ici -->
+              <p class="instruction">Clique sur les Pokemons pour les affaiblir et les capturer!</p>
+            </div>
+
+            <div class="capture-stats">
+              <div id="pokemon-to-catch" class="pokemon-info" style="display: none;">
+                <img id="capture-pokemon-img" src="" alt="Pokemon" class="pokemon-img-large" onclick="attackPokemon(false)">
+                <p id="capture-pokemon-name"></p>
+                <div class="hp-container">
+                  <div class="hp-bar">
+                    <div id="pokemon-hp-bar" class="hp-fill"></div>
+                  </div>
+                  <p id="pokemon-hp-text" class="hp-text"></p>
                 </div>
-                <p id="pokemon-hp-text" class="hp-text"></p>
+                <p id="capture-hint" class="capture-hint">Clique pour attaquer!</p>
               </div>
-              <p id="capture-hint" class="capture-hint">Clique pour attaquer!</p>
             </div>
           </div>
         </div>
@@ -227,4 +240,3 @@
   <script src="js/capture.js"></script>
 </body>
 </html>
-

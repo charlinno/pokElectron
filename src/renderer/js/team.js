@@ -185,9 +185,6 @@ async function saveTeam() {
 
     if (result.success) {
       hideLoading();
-      showNotification('SUCCES', 'Equipe sauvegardee avec succes!', () => {
-        showPage('home-page');
-      });
     } else {
       hideLoading();
       showNotification('ERREUR', `Erreur: ${result.error}`);

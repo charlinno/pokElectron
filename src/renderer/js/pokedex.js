@@ -99,7 +99,8 @@ function showPokemonDetails(pokemon) {
   document.getElementById('details-id').textContent = `#${pokemon.pokedex_id}`;
   document.getElementById('details-height').textContent = pokemon.height ? `${pokemon.height} m` : 'N/A';
   document.getElementById('details-weight').textContent = pokemon.weight ? `${pokemon.weight} kg` : 'N/A';
-  document.getElementById('details-hp').textContent = pokemon.hp || 'N/A';
+  // Utiliser stats.hp si présent
+  document.getElementById('details-hp').textContent = (pokemon.stats && typeof pokemon.stats.hp !== 'undefined') ? pokemon.stats.hp : (pokemon.hp || 'N/A');
 
   // Afficher les types
   const typesList = document.getElementById('details-types-list');
@@ -128,4 +129,3 @@ function showPokemonDetails(pokemon) {
   // Afficher la page de détails
   showPage('pokemon-details-page');
 }
-
