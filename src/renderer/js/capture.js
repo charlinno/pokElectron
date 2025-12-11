@@ -217,7 +217,7 @@ function displayPokemonWithHP(pokemon) {
   `;
 
   // Clic sur l'image principal attaque (clic normal)
-  catchable.querySelector('#capture-pokemon-img').addEventListener('click', () => attackPokemon(false));
+  catchable.querySelector('#capture-pokemon-img').addEventListener('click', (e) => attackPokemon(false, e));
 
   captureArea.appendChild(catchable);
 
@@ -271,8 +271,9 @@ function updateHPBar() {
 /**
  * Attaquer le Pokemon (réduire ses PV)
  * @param {boolean} viaPokeball indique si le clic provient de la pokéball (capture instantanée)
+ * @param {Event} event l'événement de clic pour récupérer la position
  */
-function attackPokemon(viaPokeball = false) {
+function attackPokemon(viaPokeball = false, event = null) {
   if (!captureState.currentPokemon) return;
 
   // Bloquer les clics pendant l'animation de capture
@@ -289,12 +290,12 @@ function attackPokemon(viaPokeball = false) {
     return;
   }
 
-  // Effet visuel: slash pour clic normal
-  const parentEl = document.querySelector('.catchable-pokemon');
-  playSlashEffect(parentEl);
-
   // Calculer dégâts: base + nombre de pokemons en équipe
   let damage = computeClickDamage();
+
+  // Effet visuel: slashs multiples (un par dégât) + texte de dégâts
+  const parentEl = document.querySelector('.catchable-pokemon');
+  playMultipleSlashesWithDamage(parentEl, damage, event);
 
   // Réduire les PV
   captureState.currentPokemonHP -= damage;
@@ -494,6 +495,100 @@ function getRandomCaptureMessage() {
     'C\'est un succes!'
   ];
   return messages[Math.floor(Math.random() * messages.length)];
+}
+
+/**
+ * Créer plusieurs slashs (un par dégât) avec délais entre 20-60ms
+ * et afficher le texte de dégâts à l'endroit du clic
+ * @param {HTMLElement} parentEl conteneur parent
+ * @param {number} damage nombre de dégâts (= nombre de slashs)
+ * @param {Event} event événement de clic pour récupérer la position
+ */
+function playMultipleSlashesWithDamage(parentEl, damage, event) {
+  if (!parentEl) return;
+
+  // Afficher le texte de dégâts à l'endroit du clic
+  if (event) {
+    showDamageText(parentEl, event, damage);
+  }
+
+  // Créer un conteneur pour les effets de slashs
+  const effectContainer = document.createElement('div');
+  effectContainer.className = 'slash-effect';
+  parentEl.appendChild(effectContainer);
+
+  // Créer un slash par point de dégâts avec délai aléatoire
+  for (let i = 0; i < damage; i++) {
+    const delay = 20 + Math.random() * 40; // Entre 20 et 60ms
+
+    setTimeout(() => {
+      createSingleSlash(effectContainer);
+    }, i * delay);
+  }
+
+  // Nettoyer après l'animation complète
+  setTimeout(() => {
+    if (effectContainer && effectContainer.parentNode) {
+      effectContainer.parentNode.removeChild(effectContainer);
+    }
+  }, damage * 60 + 700); // Délai max + durée d'animation
+}
+
+/**
+ * Créer un seul slash avec position et rotation aléatoires
+ * @param {HTMLElement} container conteneur des slashs
+ */
+function createSingleSlash(container) {
+  const line = document.createElement('div');
+  line.className = 'slash-line';
+
+  // Positionnement aléatoire en pourcentage
+  const leftPercent = 15 + Math.random() * 70; // entre 15% et 85%
+  const topPercent = -25 + Math.random() * 60; // entre -25% et +35%
+  line.style.left = leftPercent + '%';
+  line.style.top = topPercent + '%';
+
+  // Rotation aléatoire (-60deg à 60deg)
+  const rotation = -60 + Math.random() * 120;
+  line.style.setProperty('--rot', rotation + 'deg');
+
+  container.appendChild(line);
+
+  // Supprimer le slash après l'animation
+  setTimeout(() => {
+    if (line && line.parentNode) {
+      line.parentNode.removeChild(line);
+    }
+  }, 500);
+}
+
+/**
+ * Afficher le texte de dégâts à l'endroit du clic
+ * @param {HTMLElement} parentEl conteneur parent
+ * @param {Event} event événement de clic
+ * @param {number} damage montant des dégâts
+ */
+function showDamageText(parentEl, event, damage) {
+  const damageText = document.createElement('div');
+  damageText.className = 'damage-text';
+  damageText.textContent = `-${damage}`;
+
+  // Positionner le texte à l'endroit du clic (relatif au parent)
+  const rect = parentEl.getBoundingClientRect();
+  const x = event.clientX - rect.left;
+  const y = event.clientY - rect.top;
+
+  damageText.style.left = x + 'px';
+  damageText.style.top = y + 'px';
+
+  parentEl.appendChild(damageText);
+
+  // Supprimer le texte après l'animation
+  setTimeout(() => {
+    if (damageText && damageText.parentNode) {
+      damageText.parentNode.removeChild(damageText);
+    }
+  }, 1000);
 }
 
 /**
