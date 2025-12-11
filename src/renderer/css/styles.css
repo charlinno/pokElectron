@@ -4,6 +4,27 @@
   padding: 0;
   box-sizing: border-box;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+  -webkit-user-select: none; /* Chrome, Safari, Opera */
+  -moz-user-select: none;    /* Firefox */
+  -ms-user-select: none;     /* Internet Explorer/Edge */
+  user-select: none;         /* Standard */
+  -webkit-touch-callout: none; /* iOS Safari */
+}
+
+/* Empêcher le drag des images sauf pour les cartes draggables */
+img:not(.pokemon-select-card img):not(.slot-content img) {
+  -webkit-user-drag: none;
+  user-drag: none;
+}
+
+/* Permettre le drag pour les éléments draggables */
+[draggable="true"] {
+  -webkit-user-drag: element;
+  cursor: grab;
+}
+
+[draggable="true"]:active {
+  cursor: grabbing;
 }
 
 /* Valeurs CSS par défaut */
@@ -559,6 +580,12 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   justify-content: center;
   cursor: grab;
   transition: all 0.3s ease;
+  -webkit-user-drag: element; /* Permettre le drag */
+  user-drag: element;
+}
+
+.team-slot:active {
+  cursor: grabbing;
 }
 
 .team-slot:hover {
@@ -630,6 +657,12 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   cursor: grab;
   transition: all 0.3s ease;
   position: relative;
+  -webkit-user-drag: element; /* Permettre le drag */
+  user-drag: element;
+}
+
+.pokemon-select-card:active {
+  cursor: grabbing;
 }
 
 .pokemon-select-card:hover {
