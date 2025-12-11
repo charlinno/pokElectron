@@ -174,23 +174,26 @@ body {
 }
 
 .stat-card {
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
   border-radius: 10px;
   padding: 20px 40px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   min-width: 200px;
 }
 
 .stat-number {
   font-size: 2.5em;
   font-weight: bold;
-  color: black;
+  color: #fff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
 .stat-label {
-  color: black;
+  color: rgba(255, 255, 255, 0.9);
   margin-top: 5px;
   font-size: 0.9em;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
 }
 
 /* Buttons */
@@ -301,45 +304,76 @@ body {
 
 /* Team Preview */
 .team-preview {
-  background: rgba(255, 255, 255, 0.9);
+  background: transparent;
   border-radius: 10px;
   padding: 20px;
   margin-top: 30px;
-  max-width: 600px;
-  color: #333;
+  max-width: 800px;
+  color: #fff;
 }
 
 .team-preview h3 {
   margin-bottom: 15px;
-  color: #667eea;
+  color: #fff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  font-size: 1.3em;
+  text-align: center;
 }
 
 .team-preview-list {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
 }
 
+/* Carte de Pokémon dans la team preview (même style que mode capture) */
 .team-preview-item {
   display: flex;
-  flex-direction: column;
+  gap: 12px;
   align-items: center;
-  gap: 5px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
 }
 
-.team-preview-item img {
-  width: 80px;
-  height: 80px;
-  background: #f0f0f0;
-  border-radius: 8px;
-  padding: 5px;
+.team-preview-item:hover {
+  background: rgba(0, 0, 0, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* Cercle pour l'image */
+.team-preview-item .preview-circle {
+  width: 64px;
+  height: 64px;
+  min-width: 64px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.team-preview-item .preview-circle img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
 }
 
 .team-preview-item span {
-  font-size: 0.9em;
-  font-weight: 500;
+  font-size: 1em;
+  font-weight: 600;
+  color: #fff;
+  text-transform: capitalize;
+  flex: 1;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
 }
+
 
 /* Page Header */
 .page-header {
@@ -347,18 +381,20 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 30px;
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(0, 0, 0, 0.4); /* fond noir semi-transparent */
+  backdrop-filter: blur(8px);
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  color: #333;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  color: #fff;
 }
 
 .page-header h2 {
   flex: 1;
   text-align: center;
   font-size: 1.8em;
-  color: #667eea;
+  color: #fff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
 /* Pokemon Grid */
@@ -370,25 +406,27 @@ body {
 }
 
 .pokemon-card {
-  background: white;
+  background: rgba(0, 0, 0, 0.4); /* fond noir semi-transparent */
+  backdrop-filter: blur(8px);
   border-radius: 10px;
   padding: 15px;
   text-align: center;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   position: relative;
   overflow: hidden;
 }
 
 .pokemon-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.5);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
 }
 
 .pokemon-card.uncaptured {
   opacity: 0.6;
-  background: #f5f5f5;
+  background: rgba(0, 0, 0, 0.3);
 }
 
 .pokemon-card img {
@@ -401,13 +439,14 @@ body {
 .pokemon-name {
   font-weight: bold;
   margin-bottom: 5px;
-  color: #333;
+  color: #fff;
   text-transform: capitalize;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
 }
 
 .pokemon-id {
   font-size: 0.9em;
-  color: #999;
+  color: rgba(255, 255, 255, 0.7);
   margin-bottom: 5px;
 }
 
@@ -492,8 +531,9 @@ body {
 }
 
 .team-slot {
-  background: rgba(255, 255, 255, 0.95);
-  border: 3px dashed #667eea;
+  background: rgba(0, 0, 0, 0.4); /* fond noir semi-transparent */
+  backdrop-filter: blur(8px);
+  border: 3px dashed rgba(255, 255, 255, 0.3);
   border-radius: 10px;
   min-height: 150px;
   display: flex;
@@ -505,17 +545,19 @@ body {
 
 .team-slot:hover {
   border-style: solid;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 .team-slot.dragover {
-  background: #f0f4ff;
+  background: rgba(102, 126, 234, 0.3);
   border-color: #f093fb;
 }
 
 .slot-placeholder {
   text-align: center;
-  color: #999;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .slot-placeholder p {
@@ -524,7 +566,7 @@ body {
 
 .hint {
   font-size: 0.8em;
-  color: #bbb !important;
+  color: rgba(255, 255, 255, 0.5) !important;
 }
 
 .slot-content {
@@ -546,6 +588,8 @@ body {
   font-weight: bold;
   text-transform: capitalize;
   margin: 0;
+  color: #fff;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
 }
 
 .pokemon-selector-list {
@@ -555,12 +599,13 @@ body {
   max-height: 400px;
   overflow-y: auto;
   padding: 10px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.2);
   border-radius: 10px;
 }
 
 .pokemon-select-card {
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
   border-radius: 8px;
   padding: 10px;
   text-align: center;
@@ -571,7 +616,8 @@ body {
 
 .pokemon-select-card:hover {
   transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background: rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 .pokemon-select-card.in-team {
@@ -589,6 +635,8 @@ body {
   font-weight: 500;
   margin-top: 5px;
   text-transform: capitalize;
+  color: #fff;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
 }
 
 .in-team-badge {
@@ -612,9 +660,10 @@ body {
   grid-column: 1 / -1;
   text-align: center;
   padding: 40px 20px;
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
   border-radius: 10px;
-  color: #333;
+  color: #fff;
 }
 
 /* Capture Page */
