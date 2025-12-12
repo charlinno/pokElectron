@@ -18,14 +18,12 @@ class APIService {
    */
   async getPokemon(idOrName) {
     try {
-      // Vérifier le cache
       const cacheKey = `pokemon_${idOrName}`;
       if (this.isCached(cacheKey)) {
         console.log(`Cache hit: ${idOrName}`);
         return this.cache.get(cacheKey).data;
       }
 
-      // Récupérer depuis l'API
       const url = `${this.baseURL}/pokemon/${idOrName}`;
       console.log(`Fetching: ${url}`);
 
@@ -36,10 +34,8 @@ class APIService {
 
       const data = await response.json();
 
-      // Transformer les données
       const transformedData = this.transformPokemonData(data);
 
-      // Mettre en cache
       this.cache.set(cacheKey, {
         data: transformedData,
         timestamp: Date.now()
@@ -60,14 +56,12 @@ class APIService {
    */
   async getPokemonList(offset = 0, limit = 50) {
     try {
-      // Vérifier le cache
       const cacheKey = `pokemon_list_${offset}_${limit}`;
       if (this.isCached(cacheKey)) {
         console.log(`Cache hit: pokemon_list_${offset}_${limit}`);
         return this.cache.get(cacheKey).data;
       }
 
-      // Récupérer depuis l'API
       const url = `${this.baseURL}/pokemon?offset=${offset}&limit=${limit}`;
       console.log(`Fetching: ${url}`);
 
@@ -79,7 +73,6 @@ class APIService {
       const data = await response.json();
       const pokemons = data.results;
 
-      // Mettre en cache
       this.cache.set(cacheKey, {
         data: pokemons,
         timestamp: Date.now()
@@ -88,45 +81,6 @@ class APIService {
       return pokemons;
     } catch (error) {
       console.error(`Erreur getPokemonList(${offset}, ${limit}):`, error.message);
-      throw error;
-    }
-  }
-
-  /**
-   * Récupérer tous les Pokémons de la première génération (151)
-   * @returns {Promise<Array>} Liste de tous les Pokémons
-   */
-  async getAllFirstGenPokemon() {
-    try {
-      const cacheKey = 'pokemon_list_all_first_gen';
-      if (this.isCached(cacheKey)) {
-        console.log(`Cache hit: pokemon_list_all_first_gen`);
-        return this.cache.get(cacheKey).data;
-      }
-
-      const allPokemons = [];
-      const limit = 50;
-      let offset = 0;
-      let hasMore = true;
-
-      while (hasMore && allPokemons.length < 151) {
-        const pokemons = await this.getPokemonList(offset, limit);
-        allPokemons.push(...pokemons);
-        offset += limit;
-        hasMore = pokemons.length === limit;
-      }
-
-      const firstGenPokemons = allPokemons.slice(0, 151);
-
-      // Mettre en cache
-      this.cache.set(cacheKey, {
-        data: firstGenPokemons,
-        timestamp: Date.now()
-      });
-
-      return firstGenPokemons;
-    } catch (error) {
-      console.error('Erreur getAllFirstGenPokemon:', error.message);
       throw error;
     }
   }
@@ -158,7 +112,6 @@ class APIService {
         }
       }
 
-      // Mettre en cache
       this.cache.set(cacheKey, {
         data: allPokemons,
         timestamp: Date.now()
@@ -190,10 +143,7 @@ class APIService {
         apiPokemon.sprites?.front_default ||
         '';
 
-      // Récupérer les PV (HP) depuis les stats
-      // javascript
-// Récupérer les PV (HP) depuis les stats
-      let hp = 20; // Valeur par défaut
+      let hp = 20;
       if (apiPokemon.stats && Array.isArray(apiPokemon.stats)) {
 
         const hpStat = apiPokemon.stats[0]?.base_stat;
@@ -204,7 +154,6 @@ class APIService {
           hp = hpStat;
         }
       }
-
 
       return {
         pokedex_id: apiPokemon.id,

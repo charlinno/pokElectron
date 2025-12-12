@@ -17,12 +17,19 @@ async function loadCapturePage() {
   try {
     if (window.pokemonAPI && typeof window.pokemonAPI.getTeam === 'function') {
       const teamFromApi = await window.pokemonAPI.getTeam();
-      if (Array.isArray(teamFromApi) && teamFromApi.length > 0) {
+      // Mettre à jour l'équipe même si elle est vide
+      if (Array.isArray(teamFromApi)) {
         appState.team = teamFromApi;
+        console.log('✅ Équipe chargée:', teamFromApi.length, 'Pokémons');
+      } else {
+        // Si pas de données, initialiser une équipe vide
+        appState.team = [];
+        console.log('⚠️ Aucune équipe trouvée, initialisation à vide');
       }
     }
   } catch (err) {
     console.warn('Impossible de charger l\'équipe depuis l\'API:', err);
+    appState.team = [];
   }
 
   renderCaptureTeam();
@@ -33,26 +40,11 @@ function renderCaptureTeam() {
   const teamContainer = document.getElementById('capture-team');
   teamContainer.innerHTML = '';
 
-  let teamSlots = [];
-  if (window.pokemonAPI && typeof window.pokemonAPI.getTeam === 'function') {
-    teamSlots = appState.team && appState.team.length ? appState.team : [];
-  } else {
-    teamSlots = appState.team || [];
-  }
+  let teamSlots = appState.team || [];
 
-  if (!teamSlots || teamSlots.length === 0) {
-    for (let i = 0; i < 6; i++) {
-      const slot = document.createElement('div');
-      slot.className = 'team-slot-small';
-      slot.innerHTML = `
-        <div class="pokemon-circle">
-          <span style="color:rgba(255,255,255,0.4);font-size:1.2em;">--</span>
-        </div>
-        <p style="color:rgba(255,255,255,0.5);">Vide</p>
-      `;
-      teamContainer.appendChild(slot);
-    }
-    return;
+  // S'assurer qu'on a toujours un tableau de 6 éléments
+  if (teamSlots.length === 0) {
+    teamSlots = Array(6).fill(null).map((_, i) => ({ position: i + 1, pokemon_id: null }));
   }
 
   for (let i = 0; i < 6; i++) {
@@ -93,8 +85,22 @@ function renderCaptureTeam() {
 
 function computeClickDamage() {
   const teamSlots = appState.team || [];
-  const teamCount = teamSlots.filter(s => s && s.pokemon_id).length || 0;
-  return BASE_CLICK_DAMAGE + teamCount;
+
+  // Compter uniquement les slots qui ont un pokemon_id valide
+  const teamCount = teamSlots.filter(slot => {
+    return slot && slot.pokemon_id;
+  }).length;
+
+  const totalDamage = BASE_CLICK_DAMAGE + teamCount;
+
+  console.log('💥 Calcul dégâts:', {
+    baseClickDamage: BASE_CLICK_DAMAGE,
+    pokemonsInTeam: teamCount,
+    totalDamage: totalDamage,
+    team: teamSlots
+  });
+
+  return totalDamage;
 }
 
 function startCaptures() {
@@ -161,6 +167,9 @@ function spawnNextPokemon() {
 }
 
 function displayPokemonWithHP(pokemon) {
+  console.log('🎮 Nouveau Pokémon à capturer:', pokemon.name);
+  console.log('👥 État de l\'équipe:', appState.team);
+
   const pokemonInfo = document.getElementById('pokemon-to-catch');
   const captureArea = document.getElementById('capture-area');
 

@@ -7,7 +7,6 @@ const path = require('path');
  */
 class Database {
   constructor(dbPath = null) {
-    // Utiliser un chemin par défaut ou un chemin personnalisé
     if (dbPath) {
       this.dbPath = dbPath;
     } else {
