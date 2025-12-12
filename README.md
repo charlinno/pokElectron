@@ -148,6 +148,61 @@ Pokedex/
 └── package.json
 ```
 
+### 📊 Schéma de Base de Données
+
+L'application utilise **SQLite** comme base de données relationnelle embarquée pour stocker les Pokémons et la composition de l'équipe.
+
+**Localisation** : `%AppData%/pokedex-electron/pokedex.db`
+
+```mermaid
+erDiagram
+    POKEMON ||--o{ TEAM : "peut être dans"
+    
+    POKEMON {
+        INTEGER id PK
+        INTEGER pokedex_id UK "Numéro Pokédex"
+        VARCHAR name "Nom du Pokémon"
+        VARCHAR image_url "URL image"
+        BOOLEAN is_captured "Statut capture"
+        TIMESTAMP capture_date "Date capture"
+        VARCHAR type_primary "Type principal"
+        VARCHAR type_secondary "Type secondaire"
+        FLOAT height "Taille en mètres"
+        FLOAT weight "Poids en kg"
+        INTEGER hp "Points de vie"
+        TIMESTAMP created_at "Date création"
+    }
+    
+    TEAM {
+        INTEGER id PK
+        INTEGER position UK "Position 1-6"
+        INTEGER pokemon_id FK "Référence Pokémon"
+        TIMESTAMP added_date "Date ajout"
+        INTEGER order_index "Ordre affichage"
+    }
+```
+
+**Relations** :
+- Un Pokémon peut être dans l'équipe (0 ou 1 fois)
+- Une position de l'équipe contient 0 ou 1 Pokémon
+- L'équipe est limitée à 6 positions maximum
+
+**Requêtes principales** :
+```sql
+-- Récupérer tous les Pokémons capturés
+SELECT * FROM pokemon WHERE is_captured = 1 ORDER BY name;
+
+-- Récupérer l'équipe complète avec détails
+SELECT t.position, p.* FROM team t
+LEFT JOIN pokemon p ON t.pokemon_id = p.id
+ORDER BY t.position;
+
+-- Capturer un Pokémon
+UPDATE pokemon 
+SET is_captured = 1, capture_date = CURRENT_TIMESTAMP 
+WHERE id = ?;
+```
+
 ---
 
 ## 🚀 Installation
