@@ -18,11 +18,7 @@
 - [Architecture](#architecture)
 - [Installation](#installation)
 - [Utilisation](#utilisation)
-- [Sécurité](#sécurité)
 - [Tests](#tests)
-- [CI/CD](#cicd)
-- [Packaging](#packaging)
-- [Documentation](#documentation)
 - [License](#license)
 
 ---
