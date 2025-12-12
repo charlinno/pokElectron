@@ -1,23 +1,20 @@
-/* Styles globaux */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
-  -webkit-user-select: none; /* Chrome, Safari, Opera */
-  -moz-user-select: none;    /* Firefox */
-  -ms-user-select: none;     /* Internet Explorer/Edge */
-  user-select: none;         /* Standard */
-  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
 }
 
-/* Empêcher le drag des images sauf pour les cartes draggables */
 img:not(.pokemon-select-card img):not(.slot-content img) {
   -webkit-user-drag: none;
   user-drag: none;
 }
 
-/* Permettre le drag pour les éléments draggables */
 [draggable="true"] {
   -webkit-user-drag: element;
   cursor: grab;
@@ -27,14 +24,12 @@ img:not(.pokemon-select-card img):not(.slot-content img) {
   cursor: grabbing;
 }
 
-/* Valeurs CSS par défaut */
 :root {
   --rot: 0deg;
 }
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  /* Fond global assombri uniquement pour l'arrière-plan */
   background-color: #000000;
   background-image:
     linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
@@ -46,10 +41,9 @@ body {
   color: #333;
   display: flex;
   flex-direction: column;
-  padding-top: 32px; /* Hauteur de la barre de titre */
+  padding-top: 32px;
 }
 
-/* Assurer la police pour tous les éléments textuels */
 h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
 }
@@ -119,7 +113,6 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   background-color: rgba(255, 255, 255, 0.3);
 }
 
-/* Animation de rotation pour le bouton refresh */
 .title-bar-btn.refresh-btn.rotating svg {
   animation: spin 1s linear infinite;
 }
@@ -140,7 +133,6 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   flex-direction: column;
 }
 
-/* Pages */
 .page {
   display: none;
   width: 100%;
@@ -162,7 +154,6 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   }
 }
 
-/* Container */
 .container {
   max-width: 1200px;
   margin: 0 auto;
@@ -170,7 +161,6 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   flex: 1;
 }
 
-/* Home Page */
 .home-container {
   display: flex;
   flex-direction: column;
@@ -192,7 +182,6 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   opacity: 0.9;
 }
 
-/* Stats Section */
 .stats-section {
   display: flex;
   gap: 20px;
@@ -223,7 +212,6 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
 }
 
-/* Buttons */
 .btn {
   padding: 12px 24px;
   border: none;
@@ -235,7 +223,7 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
 }
 
 .btn-primary {
-  background: rgba(220, 20, 20, 0.8); /* rouge semi-transparent */
+  background: rgba(220, 20, 20, 0.8);
   backdrop-filter: blur(4px);
   color: white;
   border: 2px solid rgba(255, 255, 255, 0.3);
@@ -250,7 +238,7 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
 }
 
 .btn-secondary {
-  background: rgba(0, 0, 0, 0.8); /* noir semi-transparent */
+  background: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(4px);
   color: white;
   border: 2px solid rgba(255, 255, 255, 0.3);
@@ -265,7 +253,7 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
 }
 
 .btn-tertiary {
-  background: rgba(255, 255, 255, 0.8); /* blanc semi-transparent */
+  background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(4px);
   color: white;
   border: 2px solid rgba(255, 255, 255, 0.4);
@@ -279,7 +267,6 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   box-shadow: 0 4px 12px rgba(255, 255, 255, 0.4);
 }
 
-/* Styles spécifiques pour le bouton de capture - texte blanc maintenant */
 .catch-btn {
   color: black;
 }
@@ -328,7 +315,6 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   background: #cc0000;
 }
 
-/* Buttons Section */
 .buttons-section {
   display: flex;
   flex-direction: column;
@@ -341,7 +327,6 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   width: 100%;
 }
 
-/* Team Preview */
 .team-preview {
   background: transparent;
   border-radius: 10px;
@@ -365,7 +350,6 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   gap: 12px;
 }
 
-/* Carte de Pokémon dans la team preview (même style que mode capture) */
 .team-preview-item {
   display: flex;
   gap: 12px;
@@ -384,7 +368,6 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
-/* Cercle pour l'image */
 .team-preview-item .preview-circle {
   width: 64px;
   height: 64px;
@@ -414,13 +397,12 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
 }
 
 
-/* Page Header */
 .page-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 30px;
-  background: rgba(0, 0, 0, 0.4); /* fond noir semi-transparent */
+  background: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(8px);
   padding: 20px;
   border-radius: 10px;
@@ -436,7 +418,6 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
-/* Pokemon Grid */
 .pokemon-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -445,7 +426,7 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
 }
 
 .pokemon-card {
-  background: rgba(0, 0, 0, 0.4); /* fond noir semi-transparent */
+  background: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(8px);
   border-radius: 10px;
   padding: 15px;
@@ -548,7 +529,6 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   font-weight: bold;
 }
 
-/* Team Builder */
 .team-builder {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -570,7 +550,7 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
 }
 
 .team-slot {
-  background: rgba(0, 0, 0, 0.4); /* fond noir semi-transparent */
+  background: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(8px);
   border: 3px dashed rgba(255, 255, 255, 0.3);
   border-radius: 10px;
@@ -580,7 +560,7 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   justify-content: center;
   cursor: grab;
   transition: all 0.3s ease;
-  -webkit-user-drag: element; /* Permettre le drag */
+  -webkit-user-drag: element;
   user-drag: element;
 }
 
@@ -657,7 +637,7 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   cursor: grab;
   transition: all 0.3s ease;
   position: relative;
-  -webkit-user-drag: element; /* Permettre le drag */
+  -webkit-user-drag: element;
   user-drag: element;
 }
 
@@ -717,22 +697,20 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   color: #fff;
 }
 
-/* Capture Page */
 .capture-container {
-  /* Remplacer background blanc par transparent et utiliser grid 2 colonnes */
-  background: transparent; /* enlever bloc blanc */
+  background: transparent;
   border-radius: 10px;
   padding: 20px;
   color: #333;
   display: grid;
-  grid-template-columns: 260px 1fr; /* colonne fixe pour l'équipe à gauche */
+  grid-template-columns: 260px 1fr;
   gap: 20px;
   align-items: start;
-  min-height: 520px; /* s'assurer que tout tient */
+  min-height: 520px;
 }
 
 .capture-left {
-  background: transparent; /* pas de fond blanc */
+  background: transparent;
   color: white;
 }
 
@@ -752,13 +730,13 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   display: flex;
   gap: 12px;
   align-items: center;
-  padding: 8px 12px; /* padding vertical réduit */
+  padding: 8px 12px;
   border-radius: 12px;
-  background: rgba(0, 0, 0, 0.4); /* fond noir semi-transparent */
+  background: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(4px);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   transition: all 0.3s ease;
-  min-height: 56px; /* hauteur réduite du background */
+  min-height: 56px;
 }
 
 .team-capture .team-slot-small:hover {
@@ -766,19 +744,18 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   transform: translateX(4px);
 }
 
-/* Cercle contenant l'image du Pokémon */
 .team-capture .pokemon-circle {
   width: 64px;
-  height: 64px; /* légèrement plus grand que le background */
+  height: 64px;
   min-width: 64px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.15); /* cercle plus clair que le fond */
+  background: rgba(255, 255, 255, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
-  margin: -4px 0; /* dépasse légèrement en haut et en bas */
+  margin: -4px 0;
 }
 
 .team-capture .pokemon-circle img {
@@ -805,14 +782,14 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
 .capture-area {
   width: 100%;
   height: 360px;
-  background: transparent; /* enlever fond blanc */
+  background: transparent;
   border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 0;
   position: relative;
-  overflow: hidden; /* Empêcher les animations de déborder */
+  overflow: hidden;
 }
 
 .instruction {
@@ -828,12 +805,11 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   gap: 10px;
   cursor: pointer;
   position: relative;
-  animation: pokemonIdle 1.4s ease-in-out infinite alternate; /* idle léger */
+  animation: pokemonIdle 1.4s ease-in-out infinite alternate;
   max-width: 100%;
   max-height: 100%;
 }
 
-/* Désactiver les interactions pendant la capture */
 .catchable-pokemon.capturing-in-progress {
   pointer-events: none;
   cursor: default;
@@ -844,11 +820,10 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   height: 180px;
   object-fit: contain;
   filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.45));
-  background: transparent; /* enlever bloc blanc */
-  will-change: transform, filter; /* Optimisation pour les animations */
+  background: transparent;
+  will-change: transform, filter;
 }
 
-/* Animation de capture avec halo blanc (déclenchée par JS) */
 @keyframes pokemonCaptureFlash {
   0% {
     transform: scale(1) translateZ(0);
@@ -856,7 +831,7 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
     opacity: 1;
   }
   20% {
-    transform: scale(1.05) translateZ(0); /* Réduit l'expansion */
+    transform: scale(1.05) translateZ(0);
     filter:
       brightness(2.5)
       drop-shadow(0 0 25px rgba(255, 255, 255, 1))
@@ -889,13 +864,11 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   }
 }
 
-/* Classe pour déclencher l'animation de capture */
 .catchable-pokemon img.capturing {
   animation: pokemonCaptureFlash 0.6s ease-out forwards;
-  transform-origin: center center; /* S'assurer que le scale part du centre */
+  transform-origin: center center;
 }
 
-/* Pokéball cliquable (capture instantanée - RARE 10%) */
 .pokeball {
   position: absolute;
   width: 50px;
@@ -904,10 +877,9 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   transition: transform 0.2s ease;
   z-index: 50;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
-  animation: pokeballGlow 2s ease-in-out infinite; /* Animation de pulsation */
+  animation: pokeballGlow 2s ease-in-out infinite;
 }
 
-/* Animation de pulsation dorée pour indiquer la rareté */
 @keyframes pokeballGlow {
   0%, 100% {
     filter:
@@ -928,14 +900,13 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
     drop-shadow(0 0 20px rgba(255, 215, 0, 1))
     drop-shadow(0 0 30px rgba(255, 215, 0, 0.8))
     drop-shadow(0 0 40px rgba(255, 215, 0, 0.5));
-  animation: none; /* Stopper l'animation au hover */
+  animation: none;
 }
 
 .pokeball:active {
   transform: scale(1);
 }
 
-/* Animation de la Pokéball de capture qui arrive de la droite */
 @keyframes pokeballCaptureFromRight {
   0% {
     right: -100px;
@@ -960,7 +931,6 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   }
 }
 
-/* Pokéball d'animation de capture */
 .capture-pokeball-anim {
   position: absolute;
   width: 70px;
@@ -981,7 +951,6 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   100% { transform: translateY(-6px); }
 }
 
-/* Pokemon-info: affichage des infos de capture */
 .pokemon-info {
   display: flex;
   flex-direction: column;
@@ -996,7 +965,6 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Nom du Pokémon au-dessus de la barre de vie */
 .pokemon-name-display {
   font-size: 1.2em;
   font-weight: 700;
@@ -1008,7 +976,6 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   text-align: center;
 }
 
-/* Barre de vie classique (style Pokémon) */
 .hp-bar-classic {
   width: 100%;
   max-width: 360px;
@@ -1034,21 +1001,20 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   width: 100%;
   border-radius: 8px;
   transition: width 0.3s ease, background-color 0.3s ease;
-  background: #4caf50; /* vert par défaut */
+  background: #4caf50;
   box-shadow: inset 0 -2px 4px rgba(0,0,0,0.2);
 }
 
-/* Couleurs de la barre selon le pourcentage (gérées par JS mais définies ici) */
 .hp-bar-fill.hp-high {
-  background: #4caf50; /* vert */
+  background: #4caf50;
 }
 
 .hp-bar-fill.hp-medium {
-  background: #ffb300; /* jaune/orange */
+  background: #ffb300;
 }
 
 .hp-bar-fill.hp-low {
-  background: #f44336; /* rouge */
+  background: #f44336;
 }
 
 .hp-bar-text {
@@ -1072,7 +1038,6 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
 /* Supprimer les anciens styles de barre de vie */
 /* .hp-row, .hp-line, .hp-name, .hp-text, .hp-container déjà supprimés ou remplacés */
 
-/* Message de capture success */
 .capture-success {
   display: flex;
   flex-direction: column;
@@ -1116,7 +1081,6 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Effet slash (animation rapide quand on clique sur le pokemon) */
 .slash-effect {
   position: absolute;
   left: 0;
@@ -1134,9 +1098,8 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   height: 45%;
   background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.7));
   transform-origin: center;
-  border-radius: 50%; /* Arrondi total pour créer un arc de cercle */
+  border-radius: 50%;
   opacity: 0;
-  /* Effet de halo lumineux multiple */
   box-shadow:
     0 0 8px 2px rgba(255, 255, 255, 0.8),
     0 0 15px 4px rgba(255, 255, 255, 0.6),
@@ -1162,12 +1125,10 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   }
 }
 
-/* petite transition sur l'image lors du clic pour renforcer l'impact */
 .catchable-pokemon img:active {
   transform: scale(0.96) translateY(-4px);
 }
 
-/* Texte de dégâts qui apparaît au clic */
 .damage-text {
   position: absolute;
   font-size: 1.5em;
@@ -1183,7 +1144,6 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   animation: damageTextAnim 1s ease-out forwards;
 }
 
-/* Texte de dégâts critiques (jaune/or) */
 .critical-damage-text {
   font-size: 2em;
   color: #FFD700;
@@ -1229,10 +1189,9 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   }
 }
 
-/* Conteneur de l'effet d'éclair électrique */
 .lightning-effect {
   position: absolute;
-  bottom: 0; /* Partir du bas (pied du Pokémon) */
+  bottom: 0;
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
@@ -1242,15 +1201,14 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   overflow: visible;
 }
 
-/* Éclair électrique individuel (plus large) */
 .lightning-bolt {
   position: absolute;
-  bottom: 0; /* Ancré en bas */
+  bottom: 0;
   left: 50%;
-  width: 12px; /* 3x plus large qu'avant */
+  width: 12px;
   height: 100%;
   background: linear-gradient(
-    0deg, /* Inversé : de bas en haut */
+    0deg,
     #00BFFF 0%,
     #1E90FF 20%,
     #4169E1 50%,
@@ -1264,7 +1222,6 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   animation: lightningStrike 0.4s ease-out forwards;
 }
 
-/* Animation de l'éclair qui monte du bas */
 @keyframes lightningStrike {
   0% {
     opacity: 0;
@@ -1290,7 +1247,6 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   }
 }
 
-/* Flash blanc sur le Pokémon lors du coup critique */
 .critical-flash {
   animation: criticalFlashAnim 0.6s ease-out;
 }
@@ -1313,7 +1269,6 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   }
 }
 
-/* Responsive: sur mobile on empile */
 @media (max-width: 900px) {
   .capture-container {
     grid-template-columns: 1fr;
@@ -1329,7 +1284,6 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   }
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .team-builder {
     grid-template-columns: 1fr;
@@ -1400,7 +1354,6 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   padding: 20px;
 }
 
-/* Image du Pokémon avec cercle */
 .pokemon-image-large {
   width: 250px;
   height: 250px;
@@ -1500,7 +1453,6 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .pokemon-details-container {
     grid-template-columns: 1fr;
@@ -1512,3 +1464,118 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, div 
     height: 200px;
   }
 }
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.3s ease-in;
+}
+
+.modal-content {
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 30px 40px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  animation: slideIn 0.3s ease-out;
+}
+
+.modal-content.notification h3 {
+  color: #fff;
+  font-size: 1.8em;
+  font-weight: 700;
+  margin: 0 0 20px 0;
+  text-align: center;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+}
+
+.modal-content.notification p {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.1em;
+  line-height: 1.6;
+  margin: 0 0 25px 0;
+  text-align: center;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+}
+
+.modal-content.notification .btn {
+  width: 100%;
+  max-width: 200px;
+  margin: 0 auto;
+  display: block;
+  font-size: 1em;
+  padding: 12px 24px;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.loading-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.loading-content {
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 30px 40px;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.loading-content p {
+  color: #fff;
+  font-size: 1.2em;
+  margin: 0;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  margin: 0 auto 20px;
+  border: 4px solid rgba(255, 255, 255, 0.2);
+  border-top: 4px solid #fff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+

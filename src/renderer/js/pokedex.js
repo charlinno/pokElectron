@@ -1,7 +1,3 @@
-/**
- * pokedex.js - Logique de la page Pokédex
- */
-
 async function loadPokédexPage() {
   try {
     const pokemonList = document.getElementById('pokemon-list');
@@ -19,7 +15,6 @@ async function loadPokédexPage() {
       return;
     }
 
-    // Créer les cartes Pokémon
     appState.allPokemon.forEach(pokemon => {
       const card = createPokemonCard(pokemon);
       pokemonList.appendChild(card);
@@ -31,9 +26,6 @@ async function loadPokédexPage() {
   }
 }
 
-/**
- * Créer une carte Pokémon
- */
 function createPokemonCard(pokemon) {
   console.log('Pokemon data', pokemon);
   const card = document.createElement('div');
@@ -81,7 +73,6 @@ function createPokemonCard(pokemon) {
     card.appendChild(badge);
   }
 
-  // Ajouter l'événement de clic pour afficher les détails
   card.addEventListener('click', () => {
     showPokemonDetails(pokemon);
   });
@@ -89,11 +80,7 @@ function createPokemonCard(pokemon) {
   return card;
 }
 
-/**
- * Afficher les détails d'un Pokémon
- */
 function showPokemonDetails(pokemon) {
-  // Mettre à jour le contenu de la page de détails
   console.log('Afficher les details pour', pokemon);
   document.getElementById('details-title').textContent = pokemon.name;
   document.getElementById('details-image').src = pokemon.image_url || 'https://via.placeholder.com/200';
@@ -103,7 +90,6 @@ function showPokemonDetails(pokemon) {
   document.getElementById('details-weight').textContent = pokemon.weight ? `${pokemon.weight} kg` : 'N/A';
   document.getElementById('details-hp').textContent = pokemon.hp ? `${pokemon.hp}` : 'N/A';
 
-  // Afficher les types
   const typesList = document.getElementById('details-types-list');
   typesList.innerHTML = '';
   if (pokemon.type_primary) {
@@ -119,7 +105,6 @@ function showPokemonDetails(pokemon) {
     typesList.appendChild(badge);
   }
 
-  // Afficher le statut de capture
   const statusElement = document.getElementById('details-capture-status');
   if (pokemon.is_captured) {
     statusElement.innerHTML = '<span class="captured-status">Ce Pokemon a ete capture!</span>';
@@ -127,6 +112,5 @@ function showPokemonDetails(pokemon) {
     statusElement.innerHTML = '<span class="uncaptured-status">Ce Pokemon n\'a pas encore ete capture</span>';
   }
 
-  // Afficher la page de détails
   showPage('pokemon-details-page');
 }

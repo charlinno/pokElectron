@@ -1,7 +1,3 @@
-/**
- * team.js - Logique de la page équipe
- */
-
 const teamState = {
   selectedTeam: [
     { position: 1, pokemon_id: null },
@@ -16,20 +12,15 @@ const teamState = {
 
 async function loadTeamPage() {
   try {
-    // Charger l'équipe existante
     const team = await window.pokemonAPI.getTeam();
 
-    // Mettre à jour l'état
     team.forEach(slot => {
       if (slot.position >= 1 && slot.position <= 6) {
         teamState.selectedTeam[slot.position - 1] = slot;
       }
     });
 
-    // Afficher les slots d'équipe
     displayTeamSlots();
-
-    // Afficher les Pokémons capturés
     displayCapturedPokemonSelector();
 
     console.log('Page equipe chargee');
@@ -38,9 +29,6 @@ async function loadTeamPage() {
   }
 }
 
-/**
- * Afficher les slots de l'équipe
- */
 function displayTeamSlots() {
   const slotsContainer = document.getElementById('team-slots');
   slotsContainer.innerHTML = '';
@@ -54,7 +42,6 @@ function displayTeamSlots() {
     slotDiv.ondragover = (e) => e.preventDefault();
 
     if (slot.pokemon_id) {
-      // Trouver le Pokémon
       const pokemon = appState.allPokemon.find(p => p.id === slot.pokemon_id);
       if (pokemon) {
         slotDiv.innerHTML = `
@@ -78,9 +65,6 @@ function displayTeamSlots() {
   });
 }
 
-/**
- * Afficher les Pokémons capturés pour la sélection
- */
 function displayCapturedPokemonSelector() {
   const selector = document.getElementById('captured-selector');
   selector.innerHTML = '';
@@ -112,28 +96,20 @@ function displayCapturedPokemonSelector() {
   });
 }
 
-/**
- * Gérer le drag d'un Pokémon
- */
 function handlePokemonDragStart(event, pokemonId) {
   teamState.draggedPokemonId = pokemonId;
   event.dataTransfer.effectAllowed = 'move';
 }
 
-/**
- * Gérer le drop dans un slot
- */
 function handleSlotDrop(event, position) {
   event.preventDefault();
 
   if (teamState.draggedPokemonId) {
-    // Vérifier si le Pokémon est déjà en équipe
     const alreadyInTeam = teamState.selectedTeam.some(
       slot => slot.pokemon_id === teamState.draggedPokemonId && slot.position !== position
     );
 
     if (alreadyInTeam) {
-      // Retirer du slot précédent
       teamState.selectedTeam.forEach(slot => {
         if (slot.pokemon_id === teamState.draggedPokemonId) {
           slot.pokemon_id = null;
@@ -141,40 +117,28 @@ function handleSlotDrop(event, position) {
       });
     }
 
-    // Ajouter au nouveau slot
     teamState.selectedTeam[position - 1].pokemon_id = teamState.draggedPokemonId;
     displayTeamSlots();
     displayCapturedPokemonSelector();
   }
 }
 
-/**
- * Gérer la fin du drag
- */
-function handleDragEnd(event) {
+function handleDragEnd() {
   teamState.draggedPokemonId = null;
 }
 
-/**
- * Retirer un Pokémon du slot
- */
 function removeFromTeam(position) {
   teamState.selectedTeam[position - 1].pokemon_id = null;
   displayTeamSlots();
   displayCapturedPokemonSelector();
 }
 
-/**
- * Sauvegarder l'équipe
- */
 async function saveTeam() {
   try {
     showLoading('Sauvegarde de l\'équipe...');
 
-    // Filtrer les slots avec un Pokémon
     const teamToSave = teamState.selectedTeam.filter(slot => slot.pokemon_id);
 
-    // Vérifier qu'il y a au moins 1 Pokémon
     if (teamToSave.length === 0) {
       hideLoading();
       showNotification('ATTENTION', 'Ajoute au moins 1 Pokemon a ton equipe!');
@@ -185,6 +149,7 @@ async function saveTeam() {
 
     if (result.success) {
       hideLoading();
+      showNotification('SUCCES', 'Ton equipe a ete sauvegardee avec succes!');
     } else {
       hideLoading();
       showNotification('ERREUR', `Erreur: ${result.error}`);
